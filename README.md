@@ -24,11 +24,13 @@ The latest container build has a tag of `06-may-2018` and this is the current ve
 The only pre-requisite for this to work is a Docker runtime. 
 
 If you want to host your configuration files inside the container you can start the image using the following syntax:
-`docker run -it mreferre/eksutils:latest` 
+`docker run -it mreferre/eksutils:latest`
+
 This is useful if you want to keep your identities and configurations *inside* the container.   
 
 If you want to host your configuration files inside the container you can start the image using the following syntax:
 `docker run -it -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube mreferre/eksutils:latest` 
+
 This is useful if you want to decouple your identities and configurations from the container; start the container with this syntax if you want to keep your identities and configurations *outside* the container, on your docker host (e.g. your laptop).     
 
 From there you can follow the [Amazon EKS Getting Started guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html) and configure both the AWS CLI as well as the Kubernetes config file. 
