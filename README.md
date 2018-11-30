@@ -5,7 +5,7 @@
 The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) for the `eksutils` container is based on an Amazon Linux OS image and it includes:
 - the [AWS CLI](https://aws.amazon.com/cli) 
 - the native `kubectl` [kubernetes client](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-- the [Heptio Authenticator for AWS](https://github.com/heptio/authenticator)
+- the [IAM Authenticator for AWS](https://github.com/kubernetes-sigs/aws-iam-authenticator)
 - the [eksuser tool](https://github.com/prabhatsharma/eksuser/blob/master/README.md)
 - the VI editor (just in case) 
 
@@ -13,13 +13,13 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 
 #### What's the version of the utilities included?
 
-With exception of the Heptio Authenticator and the eksuser util, all the other utilities are installed using the *latest version* available at the time of the docker build. For this reason the date for the build is going to be used as the `tag` for the container image. The Heptio Authenticator version instead is hard wired in the [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile).
+With exception of the IAM Authenticator and the eksuser util, all the other utilities are installed using the *latest version* available at the time of the docker build. For this reason the date for the build is going to be used as the `tag` for the container image. The IAM Authenticator version instead is hard wired in the [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile).
 
 The latest container build has a tag of `06-may-2018` and this is the current version of the tools included:
-- AWS CLI: `aws-cli/1.15.33 Python/2.7.14 Linux/4.9.87-linuxkit-aufs botocore/1.10.33`
-- kubectl: `v1.10.4`
-- Heptio Authenticator: `2018-06-05` 
-- eksuser: `1.01`
+- AWS CLI: `aws-cli/1.16.67 Python/2.7.14 Linux/4.14.70-67.55.amzn1.x86_64 botocore/1.12.57`
+- kubectl: `v1.12.3`
+- IAM Authenticator for AWS: `2018-07-26` 
+- eksuser: `0.1.0`
 
 #### How can I use it?
 

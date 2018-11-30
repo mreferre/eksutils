@@ -25,10 +25,10 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s
 RUN chmod +x ./kubectl
 RUN mv ./kubectl /usr/local/bin/kubectl
 
-# setup the heptio authenticator for aws (for Amazon EKS)
-RUN curl -o heptio-authenticator-aws https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-06-05/bin/linux/amd64/heptio-authenticator-aws
-RUN chmod +x ./heptio-authenticator-aws
-RUN mv ./heptio-authenticator-aws /usr/local/bin
+# setup the IAM authenticator for aws (for Amazon EKS)
+RUN curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator
+RUN chmod +x ./aws-iam-authenticator
+RUN mv ./aws-iam-authenticator /usr/local/bin
 
 # setup the eksuser tool
 RUN curl -L -o eksuser-linux-amd64.zip https://github.com/prabhatsharma/eksuser/releases/download/v0.1.0/eksuser-linux-amd64.zip
