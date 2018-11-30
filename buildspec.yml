@@ -1,0 +1,19 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - echo install step...
+  pre_build:
+    commands:
+      - echo logging in to AWS ECR...
+      - $(aws ecr get-login --no-include-email --region us-west-2)
+  build:
+    commands:
+      - echo build Docker image on `date`
+      - docker build -t eksutils:$(echo $CODEBUILD_BUILD_ID | sed 's/:/-/') .
+      - docker tag eksutils:$(echo $CODEBUILD_BUILD_ID | sed 's/:/-/') 693935722839.dkr.ecr.us-west-2.amazonaws.com/eksutils:$(echo $CODEBUILD_BUILD_ID | sed 's/:/-/')
+  post_build:
+    commands:
+      - echo build Docker image complete `date`
+      - echo push latest Docker images to ECR...
+      - docker push 693935722839.dkr.ecr.us-west-2.amazonaws.com/eksutils:$(echo $CODEBUILD_BUILD_ID | sed 's/:/-/')
