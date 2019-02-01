@@ -6,7 +6,8 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - the [AWS CLI](https://aws.amazon.com/cli) 
 - the native `kubectl` [kubernetes client](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - the [IAM Authenticator for AWS](https://github.com/kubernetes-sigs/aws-iam-authenticator)
-- the [eksuser tool](https://github.com/prabhatsharma/eksuser/blob/master/README.md)
+- the [eksctl tool](https://github.com/weaveworks/eksctl)
+- the [eksuser tool](https://github.com/prabhatsharma/eksuser/)
 - the VI editor (just in case) 
 
 `eksutils` includes the client side tooling and its dependencies as documented here in the [Amazon EKS Getting Started guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html). While this was built specifically for EKS, `eksutils` can also be used as a standard AWS CLI.
@@ -15,11 +16,13 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 
 With exception of the IAM Authenticator and the eksuser util, all the other utilities are installed using the *latest version* available at the time of the docker build. For this reason the date for the build is going to be used as the `tag` for the container image. The IAM Authenticator version instead is hard wired in the [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile).
 
-The latest container build has a tag of `06-may-2018` and this is the current version of the tools included:
-- AWS CLI: `aws-cli/1.16.67 Python/2.7.14 Linux/4.14.70-67.55.amzn1.x86_64 botocore/1.12.57`
-- kubectl: `v1.12.3`
+The latest container build has a tag of `01-feb-2019` and this is the current version of the tools included:
+- AWS CLI: `aws-cli/1.16.96 Python/2.7.14 Linux/4.14.88-88.76.amzn2.x86_64 botocore/1.12.86`
+- kubectl: `v1.13.2`
 - IAM Authenticator for AWS: `2018-07-26` 
+- eksctl: `0.1.20-rc.2`
 - eksuser: `0.1.0`
+
 
 #### How can I use it?
 
