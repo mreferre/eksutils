@@ -28,7 +28,7 @@ RUN mv ./aws-iam-authenticator /usr/local/bin
 
 # setup eksctl (latest at time of docker build)
 RUN curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp 
-RUN sudo mv -v /tmp/eksctl /usr/local/bin
+RUN mv -v /tmp/eksctl /usr/local/bin
 
 # setup the eksuser tool
 RUN curl -L -o eksuser-linux-amd64.zip https://github.com/prabhatsharma/eksuser/releases/download/v0.1.0/eksuser-linux-amd64.zip
