@@ -6,6 +6,7 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - the [AWS CLI](https://aws.amazon.com/cli) 
 - the native `kubectl` [kubernetes client](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - the [IAM Authenticator for AWS](https://github.com/kubernetes-sigs/aws-iam-authenticator)
+- the [helm tool](https://github.com/helm/helm)
 - the [eksctl tool](https://github.com/weaveworks/eksctl)
 - the [eksuser tool](https://github.com/prabhatsharma/eksuser/)
 - the VI editor (just in case) 
@@ -20,8 +21,9 @@ The latest container build has a tag of `01-feb-2019` and this is the current ve
 - AWS CLI: `aws-cli/1.16.96 Python/2.7.14 Linux/4.14.88-88.76.amzn2.x86_64 botocore/1.12.86`
 - kubectl: `v1.13.2`
 - IAM Authenticator for AWS: `2018-07-26` 
+- helm: `v2.12.3`
 - eksctl: `0.1.20-rc.2`
-- eksuser: `0.1.0`
+- eksuser: `0.1.1`
 
 
 #### How can I use it?

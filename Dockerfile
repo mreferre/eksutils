@@ -7,7 +7,7 @@ MAINTAINER massimo@it20.info
 RUN yum update -y 
 
 # setup various utils
-RUN yum install unzip jq vi less -y  
+RUN yum install unzip jq vi wget less -y  
 
 # setup pip 
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
@@ -26,12 +26,17 @@ RUN curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/
 RUN chmod +x ./aws-iam-authenticator
 RUN mv ./aws-iam-authenticator /usr/local/bin
 
+# setup Helm
+RUN curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
+RUN chmod +x get_helm.sh
+RUN ./get_helm.sh
+
 # setup eksctl (latest at time of docker build)
 RUN curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp 
 RUN mv -v /tmp/eksctl /usr/local/bin
 
 # setup the eksuser tool
-RUN curl -L -o eksuser-linux-amd64.zip https://github.com/prabhatsharma/eksuser/releases/download/v0.1.0/eksuser-linux-amd64.zip
+RUN curl -L -o eksuser-linux-amd64.zip https://github.com/prabhatsharma/eksuser/releases/download/v0.1.1/eksuser-linux-amd64.zip
 RUN unzip eksuser-linux-amd64.zip
 RUN chmod +x ./binaries/linux/eksuser
 RUN mv ./binaries/linux/eksuser /usr/local/bin/eksuser
