@@ -14,8 +14,8 @@ RUN yum update -y
 RUN yum install unzip jq vi wget less git which -y  
 
 # setup Node (latest at time of docker build)
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.0/install.sh | bash
-RUN nvm install 8.11 
+RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.32.0/install.sh | bash && export NVM_DIR="/root/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+RUN nvm install 8.11
 
 # setup Typescript (8.11)
 RUN npm install -g typescript
