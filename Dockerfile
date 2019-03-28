@@ -14,15 +14,16 @@ RUN yum update -y
 RUN yum install unzip jq vi wget less git which -y  
 
 # setup Node (8.11)
-ENV NVM_DIR /usr/local/nvm # or ~/.nvm , depending
-ENV NODE_VERSION 8.11.0
-RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.32.0/install.sh | bash \
+ENV NVM_DIR /usr/local/nvm
+ENV NODE_VERSION 8.11.3
+WORKDIR $NVM_DIR
+RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
     && nvm use default
-ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
-ENV PATH      $NVM_DIR/v$NODE_VERSION/bin:$PATH
+ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
+ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 
 # setup Typescript (latest at time of docker build)
 RUN npm install -g typescript
@@ -79,5 +80,4 @@ RUN mv k9s /usr/local/bin/k9s
 ##################### INSTALLATION END #####################
 
 CMD /bin/sh
-
 
