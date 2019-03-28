@@ -4,11 +4,14 @@
 
 The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) for the `eksutils` container is based on an Amazon Linux OS image and it includes:
 - the [AWS CLI](https://aws.amazon.com/cli) 
+- the [AWS CDK](https://github.com/awslabs/aws-cdk)
 - the native `kubectl` [kubernetes client](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - the [IAM Authenticator for AWS](https://github.com/kubernetes-sigs/aws-iam-authenticator)
 - the [helm tool](https://github.com/helm/helm)
 - the [eksctl tool](https://github.com/weaveworks/eksctl)
 - the [eksuser tool](https://github.com/prabhatsharma/eksuser/)
+- the [kubecfg tool](https://github.com/ksonnet/kubecfg)
+- the [k9s tool](https://k9ss.io/)
 - the VI editor (just in case) 
 
 `eksutils` includes the client side tooling and its dependencies as documented here in the [Amazon EKS Getting Started guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html). While this was built specifically for EKS, `eksutils` can also be used as a standard AWS CLI.
@@ -19,12 +22,14 @@ With exception of the IAM Authenticator and the eksuser util, all the other util
 
 The latest container build has a tag of `01-feb-2019` and this is the current version of the tools included:
 - AWS CLI: `aws-cli/1.16.96 Python/2.7.14 Linux/4.14.88-88.76.amzn2.x86_64 botocore/1.12.86`
-- kubectl: `v1.13.2`
+- AWS CDK: `aws-cdk@0.26.0`
+- kubectl: `v1.14.0`
 - IAM Authenticator for AWS: `2018-07-26` 
 - helm: `v2.12.3`
 - eksctl: `0.1.20-rc.2`
 - eksuser: `0.1.1`
-
+- kubecfg: `0.9.1`
+- k9s: `0.3.0`
 
 #### How can I use it?
 
@@ -34,7 +39,7 @@ You have a couple of options.
 
 ##### Option #1
 
-`docker run -it mreferre/eksutils:latest`
+`docker run -it --rm mreferre/eksutils:latest`
 
 Use this option if:
 
@@ -45,7 +50,7 @@ If you use this option you need to make sure you configure your AWS credentials 
 
 ##### Option #2
 
-`docker run -it -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube mreferre/eksutils:latest` 
+`docker run -it --rm -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube mreferre/eksutils:latest` 
 
 Use this option if:
 
