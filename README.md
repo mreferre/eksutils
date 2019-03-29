@@ -18,24 +18,13 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 
 #### What's the version of the utilities included?
 
-With exception of the IAM Authenticator and the eksuser util, all the other utilities are installed using the *latest version* available at the time of the docker build. For this reason the date for the build is going to be used as the `tag` for the container image. The IAM Authenticator version instead is hard wired in the [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile).
-
-The latest container build has a tag of `01-feb-2019` and this is the current version of the tools included:
-- AWS CLI: `aws-cli/1.16.96 Python/2.7.14 Linux/4.14.88-88.76.amzn2.x86_64 botocore/1.12.86`
-- AWS CDK: `aws-cdk@0.26.0`
-- kubectl: `v1.14.0`
-- IAM Authenticator for AWS: `2018-07-26` 
-- helm: `v2.12.3`
-- eksctl: `0.1.20-rc.2`
-- eksuser: `0.1.1`
-- kubecfg: `0.9.1`
-- k9s: `0.3.0`
+With exception of the IAM Authenticator and the eksuser util, all the other utilities are installed using the *latest version* available at the time of the docker build. For this reason the date for the build is going to be used as the `tag` for the container image. A few utilities (e.g. the IAM Authenticator) have releases that are fixed and are defined in the [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile).
 
 #### How can I use it?
 
 The only pre-requisite for this to work is a Docker runtime. 
 
-You have a couple of options. 
+You have a few options. 
 
 ##### Option #1
 
@@ -59,4 +48,14 @@ Use this option if:
 * you are running the container on a host that IS configured with AWS credentials and a valid `.kube/config`. 
 
 If the configurations already exist you are good to go. If they do not exist on your host you need to make sure you configure your AWS credentials (via `aws configure`) as well as your `.kube/config` (via `aws eks update-kubeconfig --name cluster_name`) before you can start using it. Note that, with this docker setup, the configurations will be persisted on the docker host when you stop the container. 
+
+##### Option #3
+
+`docker run -it --rm --network host -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube mreferre/eksutils:latest`
+
+Use this option if:
+
+* you want the whole experience of option #2. 
+* you want, in addition, the ability to connect to the host network stack (e.g. to proxy to the dashboard).  
+
 

@@ -79,5 +79,7 @@ RUN mv k9s /usr/local/bin/k9s
 
 ##################### INSTALLATION END #####################
 
+WORKDIR /
+
 CMD /bin/sh
 
