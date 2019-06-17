@@ -47,8 +47,8 @@ RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s
 RUN chmod +x ./kubectl
 RUN mv ./kubectl /usr/local/bin/kubectl
 
-# setup the IAM authenticator for aws (for Amazon EKS) (1.10.3)
-RUN curl -o aws-iam-authenticator https://amazon-eks.s3-us-west-2.amazonaws.com/1.10.3/2018-07-26/bin/linux/amd64/aws-iam-authenticator
+# setup the IAM authenticator for aws (for Amazon EKS) (0.4.0)
+RUN curl -L -o aws-iam-authenticator https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.4.0/aws-iam-authenticator_0.4.0_linux_amd64
 RUN chmod +x ./aws-iam-authenticator
 RUN mv ./aws-iam-authenticator /usr/local/bin
 

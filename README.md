@@ -56,6 +56,11 @@ If the configurations already exist you are good to go. If they do not exist on 
 Use this option if:
 
 * you want the whole experience of option #2. 
-* you want, in addition, the ability to connect to the host network stack (e.g. to proxy to the dashboard).  
+* you want, in addition, the ability to connect to the host network stack (e.g. to proxy to the Kubernetes dashboard).  
 
 
+##### Mapping local files 
+
+Sometimes you may need to access files that are already on your host. A typical use case (for me) is to start `eksutils` and be able to work with files in my Cloud9 environment. You can use any of the options above adding a volume mapping. When in Cloud9 I often times use:  
+
+`docker run -it --rm -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube -v $HOME/environment:/environment mreferre/eksutils:latest` 
