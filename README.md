@@ -24,7 +24,7 @@ With exception of the IAM Authenticator and the eksuser util, all the other util
 
 The only pre-requisite for this to work is a Docker runtime. 
 
-You have a few options. 
+You have a few options. They cover common use cases but you can mix and match them based on your own needs.
 
 ##### Option #1
 
@@ -58,9 +58,20 @@ Use this option if:
 * you want the whole experience of option #2. 
 * you want, in addition, the ability to connect to the host network stack (e.g. to proxy to the Kubernetes dashboard).  
 
-
-##### Mapping local files 
-
-Sometimes you may need to access files that are already on your host. A typical use case (for me) is to start `eksutils` and be able to work with files in my Cloud9 environment. You can use any of the options above adding a volume mapping. When in Cloud9 I often times use:  
+##### Option #4  
 
 `docker run -it --rm -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube -v $HOME/environment:/environment mreferre/eksutils:latest` 
+
+Use this option if:
+
+* you want the whole experience of option #2. 
+* you want, in addition, the ability to map a local folder into `eksutils` (in this example the Cloud9 environment).
+
+##### Option #5  
+
+`docker run -it --rm -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube -v $HOME/environment:/environment -v /var/run/docker.sock:/var/run/docker.sock mreferre/eksutils:latest` 
+
+Use this option if:
+
+* you want the whole experience of option #4. 
+* you want, in addition, the possibility to run DinD (Docker in Docker) for use cases that require running `docker build` (for example).
