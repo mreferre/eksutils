@@ -14,9 +14,9 @@ RUN yum update -y
 # docker is being installed to support DinD scenarios (e.g. for being able to build)
 RUN yum install unzip jq vi wget less git which docker -y  
 
-# setup Node (8.11)
+# setup Node (8.12.0)
 ENV NVM_DIR /usr/local/nvm
-ENV NODE_VERSION 8.11.3
+ENV NODE_VERSION 8.12.0
 WORKDIR $NVM_DIR
 RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
     && . $NVM_DIR/nvm.sh \

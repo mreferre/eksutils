@@ -18,7 +18,7 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 
 #### What's the version of the utilities included?
 
-With exception of the IAM Authenticator and the eksuser util, all the other utilities are installed using the *latest version* available at the time of the docker build. For this reason the date for the build is going to be used as the `tag` for the container image. A few utilities (e.g. the IAM Authenticator) have releases that are fixed and are defined in the [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile).
+With exception of Node, IAM Authenticator, eksuser, kubecfg and k9s, all the other components are installed using the *latest version* available at the time of the docker build. For this reason the date for the build is going to be used as the `tag` for the container image. A few utilities (e.g. the IAM Authenticator) have releases that are fixed and are defined in the [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile).
 
 #### How can I use it?
 
