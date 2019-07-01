@@ -15,9 +15,9 @@ RUN yum update -y
 # httpd-tools include the ab tool (for benchmarking http end points)
 RUN yum install unzip jq vi wget less git which docker httpd-tools -y  
 
-# setup Node (8.11)
+# setup Node (8.12.0)
 ENV NVM_DIR /usr/local/nvm
-ENV NODE_VERSION 8.11.3
+ENV NODE_VERSION 8.12.0
 WORKDIR $NVM_DIR
 RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
