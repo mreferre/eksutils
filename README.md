@@ -11,6 +11,7 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - the [eksctl tool](https://github.com/weaveworks/eksctl)
 - the [eksuser tool](https://github.com/prabhatsharma/eksuser/)
 - the [kubecfg tool](https://github.com/ksonnet/kubecfg)
+- the [ksonnet tool] (https://github.com/ksonnet/ksonnet)
 - the [k9s tool](https://k9ss.io/)
 - the VI editor (just in case) 
 

@@ -12,7 +12,8 @@ RUN yum update -y
 
 # setup various utils (latest at time of docker build)
 # docker is being installed to support DinD scenarios (e.g. for being able to build)
-RUN yum install unzip jq vi wget less git which docker -y  
+# httpd-tools include the ab tool (for benchmarking http end points)
+RUN yum install unzip jq vi wget less git which docker httpd-tools -y  
 
 # setup Node (8.11)
 ENV NVM_DIR /usr/local/nvm
@@ -72,6 +73,12 @@ RUN curl -L -o eksuser-linux-amd64.zip https://github.com/prabhatsharma/eksuser/
 RUN curl -L -o kubecfg https://github.com/ksonnet/kubecfg/releases/download/v0.9.1/kubecfg-linux-amd64 \
     && chmod +x kubecfg \
     && mv kubecfg /usr/local/bin/kubecfg
+
+# setup ksonnet (0.13.1)
+RUN curl -L -O https://github.com/ksonnet/ksonnet/releases/download/v0.13.1/ks_0.13.1_linux_amd64.tar.gz \
+   && tar -zxvf ks_0.13.1_linux_amd64.tar.gz \
+   && mv ./ks_0.13.1_linux_amd64/ks /usr/bin/ks \
+   && rm -r ks_0.13.1_linux_amd64 
 
 # setup k9s (0.3.0)
 RUN curl -L -O https://github.com/derailed/k9s/releases/download/0.3.0/k9s_0.3.0_Linux_x86_64.tar.gz \
