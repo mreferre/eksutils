@@ -11,9 +11,9 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - the [eksctl tool](https://github.com/weaveworks/eksctl)
 - the [eksuser tool](https://github.com/prabhatsharma/eksuser/)
 - the [kubecfg tool](https://github.com/ksonnet/kubecfg)
-- the [ksonnet tool] (https://github.com/ksonnet/ksonnet)
+- the [ksonnet tool](https://github.com/ksonnet/ksonnet)
 - the [k9s tool](https://k9ss.io/)
-- the VI editor (just in case) 
+- additional utils: unzip, jq, vi, wget, less, git, which, docker and httpd-tools (just in case) 
 
 `eksutils` includes the client side tooling and its dependencies as documented here in the [Amazon EKS Getting Started guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html). While this was built specifically for EKS, `eksutils` can also be used as a standard AWS CLI.
 
