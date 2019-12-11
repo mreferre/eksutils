@@ -13,7 +13,7 @@ RUN yum update -y
 # setup various utils (latest at time of docker build)
 # docker is being installed to support DinD scenarios (e.g. for being able to build)
 # httpd-tools include the ab tool (for benchmarking http end points)
-RUN yum install unzip jq vi wget less git which docker httpd-tools -y  
+RUN yum install unzip jq vi wget less git which docker httpd-tools python36 -y  
 
 # setup Node (8.12.0)
 ENV NVM_DIR /usr/local/nvm
