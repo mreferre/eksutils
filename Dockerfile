@@ -41,6 +41,11 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
 # setup the aws cli (latest at time of docker build)
 RUN pip install awscli --upgrade 
 
+# setup the aws cli v2 (latest at time of docker build)
+RUN curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+RUN unzip awscliv2.zip
+RUN ./aws/install
+
 # setup the aws cdk (latest at time of docker build)
 RUN npm i -g aws-cdk
 
