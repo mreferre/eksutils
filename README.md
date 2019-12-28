@@ -4,6 +4,7 @@
 
 The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) for the `eksutils` container is based on an Amazon Linux OS image and it includes:
 - the [AWS CLI](https://aws.amazon.com/cli) 
+- the [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) 
 - the [AWS CDK](https://github.com/awslabs/aws-cdk)
 - the native `kubectl` [kubernetes client](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - the [IAM Authenticator for AWS](https://github.com/kubernetes-sigs/aws-iam-authenticator)
