@@ -62,18 +62,22 @@ Use this option if:
 
 ##### Option #4  
 
-`docker run -it --rm -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube -v $HOME/environment:/environment mreferre/eksutils:latest` 
+`docker run -it --rm --network host -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube -v $HOME/environment:/environment mreferre/eksutils:latest` 
 
 Use this option if:
 
-* you want the whole experience of option #2. 
+* you want the whole experience of option #3. 
 * you want, in addition, the ability to map a local folder into `eksutils` (in this example the Cloud9 environment).
 
 ##### Option #5  
 
-`docker run -it --rm -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube -v $HOME/environment:/environment -v /var/run/docker.sock:/var/run/docker.sock mreferre/eksutils:latest` 
+`docker run -it --rm --network host -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube -v $HOME/environment:/environment -v /var/run/docker.sock:/var/run/docker.sock mreferre/eksutils:latest` 
 
 Use this option if:
 
 * you want the whole experience of option #4. 
 * you want, in addition, the possibility to run DinD (Docker in Docker) for use cases that require running `docker build` (for example).
+
+#### Known issues
+
+* Due to the [latest changes](https://aws.amazon.com/blogs/security/defense-in-depth-open-firewalls-reverse-proxies-ssrf-vulnerabilities-ec2-instance-metadata-service/) with the Instance Metadata Service (IMDSv2), if you are using `eksutils` in a Cloud9 environment with a role assigned to the instance, it is strongly suggested to start the container with the `--network host` flag in order to avoid NATting (and thus breaking some of the utilities that leverage the new security model).
