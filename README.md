@@ -6,7 +6,7 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - the [AWS CLI](https://aws.amazon.com/cli) 
 - the [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) 
 - the [AWS CDK](https://github.com/awslabs/aws-cdk)
-- the native `kubectl` [kubernetes client](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- the [kubectl tool](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - the [IAM Authenticator for AWS](https://github.com/kubernetes-sigs/aws-iam-authenticator)
 - the [helm tool](https://github.com/helm/helm)
 - the [eksctl tool](https://github.com/weaveworks/eksctl)
@@ -14,6 +14,7 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - the [kubecfg tool](https://github.com/ksonnet/kubecfg)
 - the [ksonnet tool](https://github.com/ksonnet/ksonnet)
 - the [k9s tool](https://k9ss.io/)
+- the [Octant tool](https://github.com/vmware-tanzu/octant)
 - additional utils: unzip, jq, vi, wget, less, git, which, docker and httpd-tools (just in case) 
 
 `eksutils` includes the client side tooling and its dependencies as documented here in the [Amazon EKS Getting Started guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html). While this was built specifically for EKS, `eksutils` can also be used as a standard AWS CLI.

@@ -90,6 +90,14 @@ RUN curl -L -O https://github.com/derailed/k9s/releases/download/0.3.0/k9s_0.3.0
     && tar -zxvf k9s_0.3.0_Linux_x86_64.tar.gz \
     && mv k9s /usr/local/bin/k9s 
 
+# setup Octant
+# browser autostart at octant launch is disabled
+# ip address and port are modified (to better work with Cloud9)  
+ENV OCTANT_DISABLE_OPEN_BROWSER=1
+ENV OCTANT_LISTENER_ADDR="0.0.0.0:8080"
+RUN curl -L -O $(curl -s https://api.github.com/repos/vmware-tanzu/octant/releases/latest | jq -r '.assets[].browser_download_url' | grep Linux-64bit.tar.gz) \
+    && tar -zxvf $(curl -s https://api.github.com/repos/vmware-tanzu/octant/releases/latest | jq -r '.assets[].name' | grep Linux-64bit.tar.gz) \
+    && mv $(curl -s https://api.github.com/repos/vmware-tanzu/octant/releases/latest | jq -r '.assets[].name' | grep Linux-64bit.tar.gz | sed -r 's/.tar.gz//')/octant /usr/local/bin/octant 
 ##################### INSTALLATION END #####################
 
 WORKDIR /
