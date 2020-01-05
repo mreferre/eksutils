@@ -2,19 +2,19 @@
 
 `eksutils` is a(n experimental) Docker container environment which includes various tools and CLIs aimed at making it easier to consume an existing [Amazon EKS](https://aws.amazon.com/eks/) cluster. 
 
-The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) for the `eksutils` container is based on an Amazon Linux OS image and it includes:
-- the [AWS CLI](https://aws.amazon.com/cli) 
-- the [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) 
-- the [AWS CDK](https://github.com/awslabs/aws-cdk)
-- the [kubectl tool](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-- the [IAM Authenticator for AWS](https://github.com/kubernetes-sigs/aws-iam-authenticator)
-- the [helm tool](https://github.com/helm/helm)
-- the [eksctl tool](https://github.com/weaveworks/eksctl)
-- the [eksuser tool](https://github.com/prabhatsharma/eksuser/)
-- the [kubecfg tool](https://github.com/ksonnet/kubecfg)
-- the [ksonnet tool](https://github.com/ksonnet/ksonnet)
-- the [k9s tool](https://k9ss.io/)
-- the [Octant tool](https://github.com/vmware-tanzu/octant)
+The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) for the `eksutils` container is based on an Amazon Linux OS image and it includes the following tools and utilities:
+- [AWS CLI](https://aws.amazon.com/cli) 
+- [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) 
+- [AWS CDK](https://github.com/awslabs/aws-cdk)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- [IAM Authenticator for AWS](https://github.com/kubernetes-sigs/aws-iam-authenticator)
+- [helm](https://github.com/helm/helm)
+- [eksctl](https://github.com/weaveworks/eksctl)
+- [eksuser](https://github.com/prabhatsharma/eksuser/)
+- [kubecfg](https://github.com/ksonnet/kubecfg)
+- [ksonnet](https://github.com/ksonnet/ksonnet)
+- [k9s](https://k9ss.io/)
+- [Octant](https://github.com/vmware-tanzu/octant)
 - additional utils: unzip, jq, vi, wget, less, git, which, docker and httpd-tools (just in case) 
 
 `eksutils` includes the client side tooling and its dependencies as documented here in the [Amazon EKS Getting Started guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html). While this was built specifically for EKS, `eksutils` can also be used as a standard AWS CLI.
@@ -30,9 +30,9 @@ The only pre-requisite for this to work is a Docker runtime.
 You have a few options. They cover common use cases but you can mix and match them based on your own needs. Have also a look at the `Scenarios` section below.
 
 ##### Option #1
-
-`docker run -it --rm mreferre/eksutils:latest`
-
+```
+docker run -it --rm mreferre/eksutils:latest`
+```
 Use this option if:
 
 *  you want to keep your identities and configurations *inside* the container.
@@ -41,9 +41,9 @@ Use this option if:
 If you use this option you need to make sure you configure your AWS credentials (via `aws configure`) as well as your `.kube/config` (via `aws eks update-kubeconfig --name cluster_name`) before you can start using it. Note that, with this docker setup, the configurations will be lost when we stop the container.  
 
 ##### Option #2
-
-`docker run -it --rm -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube mreferre/eksutils:latest` 
-
+```
+docker run -it --rm -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube mreferre/eksutils:latest` 
+```
 Use this option if:
 
 * you want to decouple your identities and configurations from the container. 
@@ -53,27 +53,27 @@ Use this option if:
 If the configurations already exist you are good to go. If they do not exist on your host you need to make sure you configure your AWS credentials (via `aws configure`) as well as your `.kube/config` (via `aws eks update-kubeconfig --name cluster_name`) before you can start using it. Note that, with this docker setup, the configurations will be persisted on the docker host when you stop the container. 
 
 ##### Option #3
-
-`docker run -it --rm --network host -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube mreferre/eksutils:latest`
-
+```
+docker run -it --rm --network host -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube mreferre/eksutils:latest`
+```
 Use this option if:
 
 * you want the whole experience of option #2. 
 * you want, in addition, the ability to connect to the host network stack.  
 
 ##### Option #4  
-
-`docker run -it --rm --network host -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube -v $HOME/myfolder:/myfolder mreferre/eksutils:latest` 
-
+```
+docker run -it --rm --network host -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube -v $HOME/myfolder:/myfolder mreferre/eksutils:latest
+```
 Use this option if:
 
 * you want the whole experience of option #3. 
 * you want, in addition, the ability to map a local folder into `eksutils`.
 
 ##### Option #5  
-
-`docker run -it --rm --network host -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube -v $HOME/environment:/environment -v /var/run/docker.sock:/var/run/docker.sock mreferre/eksutils:latest` 
-
+```
+docker run -it --rm --network host -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube -v $HOME/environment:/environment -v /var/run/docker.sock:/var/run/docker.sock mreferre/eksutils:latest` 
+```
 Use this option if:
 
 * you want the whole experience of option #4. 
@@ -87,17 +87,17 @@ The above options are raw capabilities. Hereafter I am going to discuss how I am
 
 99 out 100 times I use `eksutils` in my [Cloud9](https://aws.amazon.com/cloud9/) environment. This is because I usually deploy in different regions and the AWS backbone is faster than my ADSL to each of those regions. Also the Internet bandwidth is "slightly" better.  
 I typically disable the Cloud9 [temporary managed credentials](https://docs.aws.amazon.com/cloud9/latest/user-guide/auth-and-access-control.html#auth-and-access-control-temporary-managed-credentials) and I instead assign manually an IAM role to the EC2 instance backing my environment. I also like to map the "environment" folder in my `eksutils` container. I like to map the `.kube` folder to persist my eks cluster configurations and pointers and I also map the `.aws` folder. Given I am using IAM roles assigned to the instance I only use this to map the REGION (which I have previously configured once with the `aws configure` command).  
-
-`docker run -it --rm --network host -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube -v $HOME/environment:/environment mreferre/eksutils:latest`
-
+```
+docker run -it --rm --network host -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube -v $HOME/environment:/environment mreferre/eksutils:latest
+```
 Note I am using the `--network host` flag. This is due the fact that AWS [made changes](https://aws.amazon.com/blogs/security/defense-in-depth-open-firewalls-reverse-proxies-ssrf-vulnerabilities-ec2-instance-metadata-service/) to the Instance Metadata Service (IMDSv2) that prevent some operations to work behind a NAT. This flag puts you directly on the Cloud9 instance host network. This also allows the user to pre-view applications (e.g. `kubectl proxy`, Octant, etc.) without having to expose these services via port mapping. Just keep in mind how [previewing applications on Cloud9 works](https://docs.aws.amazon.com/cloud9/latest/user-guide/app-preview.html). It's actually quite cool and useful once you "own" it. 
 
 ##### MacOS 
 
 I rarely use `eksutils` from my Mac laptop but sometimes I do. When I do it, this is how I start it:
-
-`docker run -it --rm -p 8080:8080 -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube mreferre/eksutils:latest`
-
+```
+docker run -it --rm -p 8080:8080 -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube mreferre/eksutils:latest`
+```
 Note I map the `.aws` directory and the `.kube` directory here too. In this case mapping the `.aws` direcory is useful if you intend to save your IAM credentials with `aws configure`. If you don't and you prefer to only enter them ephimerally every time `eksutils` is launched then omit that mapping. It's more work but definitely more secured. I don't usually map other directories but it's definitely an option. Note also that MacOS doesn't support `--network host` so I start it by mapping the port 8080 (in case I want to start `kubectl proxy`, Octant or any other service). 
 
 ##### Linux
