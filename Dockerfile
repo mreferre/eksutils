@@ -90,6 +90,10 @@ RUN curl -L -O https://github.com/derailed/k9s/releases/download/0.3.0/k9s_0.3.0
     && tar -zxvf k9s_0.3.0_Linux_x86_64.tar.gz \
     && mv k9s /usr/local/bin/k9s 
 
+# setup docker-compose ()
+RUN curl -L "https://github.com/docker/compose/releases/download/1.25.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
+    && chmod +x /usr/local/bin/docker-compose 
+
 # setup Octant
 # browser autostart at octant launch is disabled
 # ip address and port are modified (to better work with Cloud9)  

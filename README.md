@@ -1,6 +1,6 @@
 #### What is it?
 
-`eksutils` is a(n experimental) Docker container environment which includes various tools and CLIs aimed at making it easier to consume an existing [Amazon EKS](https://aws.amazon.com/eks/) cluster. 
+`eksutils` is a(n experimental) container shell environment which includes various tools and CLIs aimed at making it easier to consume an existing [Amazon EKS](https://aws.amazon.com/eks/) cluster. Note the utility today contains client tools that go beyond mere EKS and has evolved to support other container orchestrators (e.g. ECS), container runtimes (e.g. Docker) and the AWS platform in general (e.g. CDK).
 
 The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) for the `eksutils` container is based on an Amazon Linux OS image and it includes the following tools and utilities:
 - [AWS CLI](https://aws.amazon.com/cli) 
@@ -14,6 +14,7 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - [kubecfg](https://github.com/ksonnet/kubecfg)
 - [ksonnet](https://github.com/ksonnet/ksonnet)
 - [k9s](https://k9ss.io/)
+- [docker-compose](https://docs.docker.com/compose/)
 - [Octant](https://github.com/vmware-tanzu/octant)
 - additional utils: unzip, jq, vi, wget, less, git, which, docker and httpd-tools (just in case) 
 
@@ -21,7 +22,7 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 
 #### What's the version of the utilities included?
 
-With exception of Node, IAM Authenticator, eksuser, kubecfg and k9s, all the other components are installed using the *latest version* available at the time of the docker build. For this reason the date for the build is going to be used as the `tag` for the container image. A few utilities (e.g. the IAM Authenticator) have releases that are fixed and are defined in the [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile).
+With exception of Node, IAM Authenticator, eksuser, kubecfg, k9s and docker-compose, all the other components are installed using the *latest version* available at the time of the docker build. For this reason the date for the build is going to be used as the `tag` for the container image. A few utilities (e.g. the IAM Authenticator) have releases that are fixed and are defined in the [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile).
 
 #### How can I use it?
 
