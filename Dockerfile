@@ -43,7 +43,7 @@ RUN yum update -y \
 
 ## This will remove intermediate downloads between RUN steps as /tmp is out of the container FS
 VOLUME /tmp
-WORKDIR /root
+WORKDIR /tmp
 
 # setup Node
 ENV NVM_DIR /usr/local/nvm
