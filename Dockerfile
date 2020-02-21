@@ -13,7 +13,7 @@ ARG KSONNET_VER=0.13.1
 ARG K9S_VER=0.3.0
 ARG DOCKER_COMPOSE_VER=1.25.4
 ARG OCTANT_VER=0.10.2
-ARG AWSCLI_URL_BASE=d1vvhvl2y92vvt.cloudfront.net
+ARG AWSCLI_URL_BASE=awscli.amazonaws.com
 ARG AWSCLI_URL_FILE=awscli-exe-linux-x86_64.zip
 ################## SETUP ENV ###############################
 ### OCTANT
@@ -44,7 +44,7 @@ RUN yum update -y \
             jq \
             less \
             openssl \
-            python36 \
+            python3 \
             tar \
             unzip \
             vi \
@@ -52,6 +52,10 @@ RUN yum update -y \
             which \
  && yum clean all \
  && rm -rf /var/cache/yum
+
+## Make python3 default
+RUN rm -f /usr/bin/python \
+ && ln -s /usr/bin/python3 /usr/bin/python
 
 ## This will remove intermediate downloads between RUN steps as /tmp is out of the container FS
 VOLUME /tmp
@@ -71,12 +75,10 @@ RUN npm install -g typescript
 # setup pip (latest at time of docker build)
 RUN curl -s https://bootstrap.pypa.io/get-pip.py -o get-pip.py \ 
    && python get-pip.py
+ 
 ########################################
 ### end setup runtime pre-requisites ###
 ########################################
-
-# setup the aws cli (latest at time of docker build)
-RUN pip install awscli --upgrade 
 
 # setup the aws cli v2 (latest at time of docker build)
 RUN curl -Ls "https://${AWSCLI_URL_BASE}/${AWSCLI_URL_FILE}" -o "awscliv2.zip" \
