@@ -13,6 +13,8 @@ ARG KSONNET_VER=0.13.1
 ARG K9S_VER=0.3.0
 ARG DOCKER_COMPOSE_VER=1.25.4
 ARG OCTANT_VER=0.10.2
+ARG AWSCLI_URL_BASE=d1vvhvl2y92vvt.cloudfront.net
+ARG AWSCLI_URL_FILE=awscli-exe-linux-x86_64.zip
 
 ################## BEGIN INSTALLATION ######################
 
@@ -70,8 +72,6 @@ RUN curl -s https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
 # setup the aws cli (latest at time of docker build)
 RUN pip install awscli --upgrade 
 
-ARG AWSCLI_URL_BASE=d1vvhvl2y92vvt.cloudfront.net
-ARG AWSCLI_URL_FILE=awscli-exe-linux-x86_64.zip
 # setup the aws cli v2 (latest at time of docker build)
 RUN curl -Ls "https://${AWSCLI_URL_BASE}/${AWSCLI_URL_FILE}" -o "awscliv2.zip" \
  && unzip awscliv2.zip \
