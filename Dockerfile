@@ -1,107 +1,138 @@
-FROM amazonlinux:2018.03
+ARG FROM_IMAGE=amazonlinux
+ARG FROM_TAG=2.0.20200207.1
+FROM ${FROM_IMAGE}:${FROM_TAG}
 MAINTAINER massimo@it20.info
 
+################## SETUP VERSIONS ##########################
+ARG KUBE_RELEASE_VER=v1.17.3
+ARG NODE_VERSION=8.12.0
+ARG IAM_AUTH_VER=0.4.0
+ARG EKSUSER_VER=0.1.1
+ARG KUBECFG_VER=0.9.1
+ARG KSONNET_VER=0.13.1
+ARG K9S_VER=0.3.0
+ARG DOCKER_COMPOSE_VER=1.25.4
+ARG OCTANT_VER=0.10.2
+ARG AWSCLI_URL_BASE=awscli.amazonaws.com
+ARG AWSCLI_URL_FILE=awscli-exe-linux-x86_64.zip
+################## SETUP ENV ###############################
+### OCTANT
+# browser autostart at octant launch is disabled
+# ip address and port are modified (to better work with Cloud9)  
+ENV OCTANT_DISABLE_OPEN_BROWSER=1
+ENV OCTANT_LISTENER_ADDR="0.0.0.0:8080"
+### NODE
+ENV NVM_DIR /usr/local/nvm
+ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
+ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+ENV NODE_VERSION=${NODE_VERSION}
 ################## BEGIN INSTALLATION ######################
 
 ########################################
 ## begin setup runtime pre-requisites ##
 ########################################
 
-# update the OS
-RUN yum update -y 
-
 # setup various utils (latest at time of docker build)
 # docker is being installed to support DinD scenarios (e.g. for being able to build)
 # httpd-tools include the ab tool (for benchmarking http end points)
-RUN yum install unzip jq vi wget less git which docker httpd-tools python36 -y  
+RUN yum update -y \
+ && yum install -y \
+            bsdtar \
+            docker \
+            git \
+            httpd-tools \
+            jq \
+            less \
+            openssl \
+            python3 \
+            tar \
+            unzip \
+            vi \
+            wget \
+            which \
+ && yum clean all \
+ && rm -rf /var/cache/yum
 
-# setup Node (8.12.0)
-ENV NVM_DIR /usr/local/nvm
-ENV NODE_VERSION 8.12.0
-WORKDIR $NVM_DIR
-RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
-    && . $NVM_DIR/nvm.sh \
-    && nvm install $NODE_VERSION \
-    && nvm alias default $NODE_VERSION \
-    && nvm use default
-ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
-ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+## Make python3 default
+RUN rm -f /usr/bin/python \
+ && ln -s /usr/bin/python3 /usr/bin/python
+
+## This will remove intermediate downloads between RUN steps as /tmp is out of the container FS
+VOLUME /tmp
+WORKDIR /tmp
+
+# Node
+RUN mkdir -p ${NVM_DIR} \
+ && curl -s https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
+ && . $NVM_DIR/nvm.sh \
+ && nvm install $NODE_VERSION \
+ && nvm alias default $NODE_VERSION \
+ && nvm use default
 
 # setup Typescript (latest at time of docker build)
 RUN npm install -g typescript
 
 # setup pip (latest at time of docker build)
-RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \ 
+RUN curl -s https://bootstrap.pypa.io/get-pip.py -o get-pip.py \ 
    && python get-pip.py
-
+ 
 ########################################
 ### end setup runtime pre-requisites ###
 ########################################
 
-# setup the aws cli (latest at time of docker build)
-RUN pip install awscli --upgrade 
-
 # setup the aws cli v2 (latest at time of docker build)
-RUN curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-RUN unzip awscliv2.zip
-RUN ./aws/install
+RUN curl -Ls "https://${AWSCLI_URL_BASE}/${AWSCLI_URL_FILE}" -o "awscliv2.zip" \
+ && unzip awscliv2.zip \
+ && ./aws/install \
+ && /usr/local/bin/aws --version
 
 # setup the aws cdk (latest at time of docker build)
 RUN npm i -g aws-cdk
 
 # setup kubectl (latest at time of docker build)
-RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl \
+RUN curl -sLO https://storage.googleapis.com/kubernetes-release/release/${KUBE_RELEASE_VER}/bin/linux/amd64/kubectl \
     && chmod +x ./kubectl \
     && mv ./kubectl /usr/local/bin/kubectl
 
-# setup the IAM authenticator for aws (for Amazon EKS) (0.4.0)
-RUN curl -L -o aws-iam-authenticator https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v0.4.0/aws-iam-authenticator_0.4.0_linux_amd64 \
+# setup the IAM authenticator for aws (for Amazon EKS)
+RUN curl -sLo aws-iam-authenticator https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/download/v${IAM_AUTH_VER}/aws-iam-authenticator_${IAM_AUTH_VER}_linux_amd64 \
     && chmod +x ./aws-iam-authenticator \
     && mv ./aws-iam-authenticator /usr/local/bin
 
 # setup Helm (latest at time of docker build)
-RUN curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get > get_helm.sh
-RUN chmod +x get_helm.sh \
-    && ./get_helm.sh 
+RUN curl -sLo get_helm.sh https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get \
+ && chmod +x get_helm.sh \
+ && ./get_helm.sh
 
 # setup eksctl (latest at time of docker build)
 RUN curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp \
     && mv -v /tmp/eksctl /usr/local/bin
 
-# setup the eksuser tool (0.1.1)
-RUN curl -L -o eksuser-linux-amd64.zip https://github.com/prabhatsharma/eksuser/releases/download/v0.1.1/eksuser-linux-amd64.zip \
-    && unzip eksuser-linux-amd64.zip \
+# setup the eksuser tool 
+RUN curl -sLo - https://github.com/prabhatsharma/eksuser/releases/download/v${EKSUSER_VER}/eksuser-linux-amd64.zip |bsdtar xf - \
     && chmod +x ./binaries/linux/eksuser \
     && mv ./binaries/linux/eksuser /usr/local/bin/eksuser
 
-# setup kubecfg (0.9.1)
-RUN curl -L -o kubecfg https://github.com/ksonnet/kubecfg/releases/download/v0.9.1/kubecfg-linux-amd64 \
+# setup kubecfg
+RUN curl -sLo kubecfg https://github.com/ksonnet/kubecfg/releases/download/v${KUBECFG_VER}/kubecfg-linux-amd64 \
     && chmod +x kubecfg \
     && mv kubecfg /usr/local/bin/kubecfg
 
-# setup ksonnet (0.13.1)
-RUN curl -L -O https://github.com/ksonnet/ksonnet/releases/download/v0.13.1/ks_0.13.1_linux_amd64.tar.gz \
-   && tar -zxvf ks_0.13.1_linux_amd64.tar.gz \
-   && mv ./ks_0.13.1_linux_amd64/ks /usr/bin/ks \
-   && rm -r ks_0.13.1_linux_amd64 
+# setup ksonnet 
+RUN curl -sLo - https://github.com/ksonnet/ksonnet/releases/download/v${KSONNET_VER}/ks_${KSONNET_VER}_linux_amd64.tar.gz |tar xfz - --strip-components=1 \
+   && mv ks /usr/bin/ks
 
-# setup k9s (0.3.0)
-RUN curl -L -O https://github.com/derailed/k9s/releases/download/0.3.0/k9s_0.3.0_Linux_x86_64.tar.gz \
-    && tar -zxvf k9s_0.3.0_Linux_x86_64.tar.gz \
+# setup k9s 
+RUN curl -sLo - https://github.com/derailed/k9s/releases/download/${K9S_VER}/k9s_${K9S_VER}_Linux_x86_64.tar.gz |tar xfz - \
     && mv k9s /usr/local/bin/k9s 
 
-# setup docker-compose ()
-RUN curl -L "https://github.com/docker/compose/releases/download/1.25.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
+# setup docker-compose 
+RUN curl -sL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VER}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose 
 
 # setup Octant
-# browser autostart at octant launch is disabled
-# ip address and port are modified (to better work with Cloud9)  
-ENV OCTANT_DISABLE_OPEN_BROWSER=1
-ENV OCTANT_LISTENER_ADDR="0.0.0.0:8080"
-RUN curl -L -O $(curl -s https://api.github.com/repos/vmware-tanzu/octant/releases/latest | jq -r '.assets[].browser_download_url' | grep Linux-64bit.tar.gz) \
-    && tar -zxvf $(curl -s https://api.github.com/repos/vmware-tanzu/octant/releases/latest | jq -r '.assets[].name' | grep Linux-64bit.tar.gz) \
-    && mv $(curl -s https://api.github.com/repos/vmware-tanzu/octant/releases/latest | jq -r '.assets[].name' | grep Linux-64bit.tar.gz | sed -r 's/.tar.gz//')/octant /usr/local/bin/octant 
+RUN curl -sLo - https://github.com/vmware-tanzu/octant/releases/download/v${OCTANT_VER}/octant_${OCTANT_VER}_Linux-64bit.tar.gz |tar xfz - --strip-components=1 \
+ && mv octant /usr/local/bin/octant 
 ##################### INSTALLATION END #####################
 
 WORKDIR /
