@@ -49,6 +49,7 @@ WORKDIR /tmp
 ENV NVM_DIR /usr/local/nvm
 ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
 ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+ENV NODE_VERSION=${NODE_VERSION}
 RUN mkdir -p ${NVM_DIR} \
  && curl -s https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
  && . $NVM_DIR/nvm.sh \
