@@ -15,7 +15,17 @@ ARG DOCKER_COMPOSE_VER=1.25.4
 ARG OCTANT_VER=0.10.2
 ARG AWSCLI_URL_BASE=d1vvhvl2y92vvt.cloudfront.net
 ARG AWSCLI_URL_FILE=awscli-exe-linux-x86_64.zip
-
+################## SETUP ENV ###############################
+### OCTANT
+# browser autostart at octant launch is disabled
+# ip address and port are modified (to better work with Cloud9)  
+ENV OCTANT_DISABLE_OPEN_BROWSER=1
+ENV OCTANT_LISTENER_ADDR="0.0.0.0:8080"
+### NODE
+ENV NVM_DIR /usr/local/nvm
+ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
+ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+ENV NODE_VERSION=${NODE_VERSION}
 ################## BEGIN INSTALLATION ######################
 
 ########################################
@@ -47,11 +57,7 @@ RUN yum update -y \
 VOLUME /tmp
 WORKDIR /tmp
 
-# setup Node
-ENV NVM_DIR /usr/local/nvm
-ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
-ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
-ENV NODE_VERSION=${NODE_VERSION}
+# Node
 RUN mkdir -p ${NVM_DIR} \
  && curl -s https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash \
  && . $NVM_DIR/nvm.sh \
@@ -123,10 +129,6 @@ RUN curl -sL "https://github.com/docker/compose/releases/download/${DOCKER_COMPO
     && chmod +x /usr/local/bin/docker-compose 
 
 # setup Octant
-# browser autostart at octant launch is disabled
-# ip address and port are modified (to better work with Cloud9)  
-ENV OCTANT_DISABLE_OPEN_BROWSER=1
-ENV OCTANT_LISTENER_ADDR="0.0.0.0:8080"
 RUN curl -sLo - https://github.com/vmware-tanzu/octant/releases/download/v${OCTANT_VER}/octant_${OCTANT_VER}_Linux-64bit.tar.gz |tar xfz - --strip-components=1 \
  && mv octant /usr/local/bin/octant 
 ##################### INSTALLATION END #####################
