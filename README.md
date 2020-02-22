@@ -3,8 +3,7 @@
 `eksutils` is a(n experimental) container shell environment which includes various tools and CLIs aimed at making it easier to consume an existing [Amazon EKS](https://aws.amazon.com/eks/) cluster. Note the utility today contains client tools that go beyond mere EKS and has evolved to support other container orchestrators (e.g. ECS), container runtimes (e.g. Docker) and the AWS platform in general (e.g. CDK).
 
 The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) for the `eksutils` container is based on an Amazon Linux OS image and it includes the following tools and utilities:
-- [AWS CLI](https://aws.amazon.com/cli) 
-- [AWS CLI v2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) 
+- [AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) 
 - [AWS CDK](https://github.com/awslabs/aws-cdk)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - [IAM Authenticator for AWS](https://github.com/kubernetes-sigs/aws-iam-authenticator)
