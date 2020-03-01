@@ -3,7 +3,7 @@ ARG FROM_TAG=2.0.20200207.1
 FROM ${FROM_IMAGE}:${FROM_TAG}
 MAINTAINER massimo@it20.info
 
-################## SETUP VERSIONS ##########################
+################ UTILITIES VERSIONS ########################
 ARG KUBE_RELEASE_VER=v1.17.3
 ARG NODE_VERSION=8.12.0
 ARG IAM_AUTH_VER=0.4.0
@@ -15,6 +15,7 @@ ARG DOCKER_COMPOSE_VER=1.25.4
 ARG OCTANT_VER=0.10.2
 ARG AWSCLI_URL_BASE=awscli.amazonaws.com
 ARG AWSCLI_URL_FILE=awscli-exe-linux-x86_64.zip
+
 ################## SETUP ENV ###############################
 ### OCTANT
 # browser autostart at octant launch is disabled
@@ -22,23 +23,26 @@ ARG AWSCLI_URL_FILE=awscli-exe-linux-x86_64.zip
 ENV OCTANT_DISABLE_OPEN_BROWSER=1
 ENV OCTANT_LISTENER_ADDR="0.0.0.0:8080"
 ### NODE
-ENV NVM_DIR /usr/local/nvm
-ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
-ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+ENV NVM_DIR=/usr/local/nvm
+ENV NODE_PATH=$NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
+ENV PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 ENV NODE_VERSION=${NODE_VERSION}
+
 ################## BEGIN INSTALLATION ######################
 
-########################################
-## begin setup runtime pre-requisites ##
-########################################
+## This will remove intermediate downloads between RUN steps as /tmp is out of the container FS
+VOLUME /tmp
+WORKDIR /tmp
+
+######################################
+## begin setup add-on systems tools ##
+######################################
 
 # setup various utils (latest at time of docker build)
 # docker is being installed to support DinD scenarios (e.g. for being able to build)
 # httpd-tools include the ab tool (for benchmarking http end points)
 RUN yum update -y \
  && yum install -y \
-            bsdtar \
-            docker \
             git \
             httpd-tools \
             jq \
@@ -53,13 +57,14 @@ RUN yum update -y \
  && yum clean all \
  && rm -rf /var/cache/yum
 
-## Make python3 default
-RUN rm -f /usr/bin/python \
- && ln -s /usr/bin/python3 /usr/bin/python
+####################################
+## end setup add-on systems tools ##
+####################################
 
-## This will remove intermediate downloads between RUN steps as /tmp is out of the container FS
-VOLUME /tmp
-WORKDIR /tmp
+
+########################################
+## begin setup runtime pre-requisites ##
+########################################
 
 # Node
 RUN mkdir -p ${NVM_DIR} \
@@ -79,6 +84,10 @@ RUN curl -s https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
 ########################################
 ### end setup runtime pre-requisites ###
 ########################################
+
+###########################
+## begin setup utilities ##
+###########################
 
 # setup the aws cli v2 (latest at time of docker build)
 RUN curl -Ls "https://${AWSCLI_URL_BASE}/${AWSCLI_URL_FILE}" -o "awscliv2.zip" \
@@ -109,7 +118,8 @@ RUN curl --silent --location "https://github.com/weaveworks/eksctl/releases/down
     && mv -v /tmp/eksctl /usr/local/bin
 
 # setup the eksuser tool 
-RUN curl -sLo - https://github.com/prabhatsharma/eksuser/releases/download/v${EKSUSER_VER}/eksuser-linux-amd64.zip |bsdtar xf - \
+RUN curl -sLo eksuser-linux-amd64.zip https://github.com/prabhatsharma/eksuser/releases/download/v${EKSUSER_VER}/eksuser-linux-amd64.zip \ 
+    && unzip eksuser-linux-amd64.zip \
     && chmod +x ./binaries/linux/eksuser \
     && mv ./binaries/linux/eksuser /usr/local/bin/eksuser
 
@@ -126,6 +136,9 @@ RUN curl -sLo - https://github.com/ksonnet/ksonnet/releases/download/v${KSONNET_
 RUN curl -sLo - https://github.com/derailed/k9s/releases/download/${K9S_VER}/k9s_${K9S_VER}_Linux_x86_64.tar.gz |tar xfz - \
     && mv k9s /usr/local/bin/k9s 
 
+# setup docker
+RUN amazon-linux-extras install docker -y
+
 # setup docker-compose 
 RUN curl -sL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VER}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose 
@@ -133,6 +146,14 @@ RUN curl -sL "https://github.com/docker/compose/releases/download/${DOCKER_COMPO
 # setup Octant
 RUN curl -sLo - https://github.com/vmware-tanzu/octant/releases/download/v${OCTANT_VER}/octant_${OCTANT_VER}_Linux-64bit.tar.gz |tar xfz - --strip-components=1 \
  && mv octant /usr/local/bin/octant 
+
+# setup glooctl 
+RUN curl -sL https://run.solo.io/gloo/install | sh 
+
+#########################
+## end setup utilities ##
+#########################
+
 ##################### INSTALLATION END #####################
 
 WORKDIR /

@@ -7,7 +7,7 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - [AWS CDK](https://github.com/awslabs/aws-cdk)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - [IAM Authenticator for AWS](https://github.com/kubernetes-sigs/aws-iam-authenticator)
-- [helm](https://github.com/helm/helm)
+- [helm version 2](https://github.com/helm/helm)
 - [eksctl](https://github.com/weaveworks/eksctl)
 - [eksuser](https://github.com/prabhatsharma/eksuser/)
 - [kubecfg](https://github.com/ksonnet/kubecfg)
@@ -15,13 +15,16 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - [k9s](https://k9ss.io/)
 - [docker-compose](https://docs.docker.com/compose/)
 - [Octant](https://github.com/vmware-tanzu/octant)
-- additional utils: unzip, jq, vi, wget, less, git, which, docker and httpd-tools (just in case) 
+- [glooctl](https://docs.solo.io/gloo/latest/)
+- additional utils: unzip, jq, vi, wget, less, git, which and httpd-tools (and more, just in case) 
 
 `eksutils` includes the client side tooling and its dependencies as documented here in the [Amazon EKS Getting Started guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html). While this was built specifically for EKS, `eksutils` can also be used as a standard AWS CLI.
 
 #### What's the version of the utilities included?
 
-With exception of Node, IAM Authenticator, eksuser, kubecfg, k9s and docker-compose, all the other components are installed using the *latest version* available at the time of the docker build. For this reason the date for the build is going to be used as the `tag` for the container image. A few utilities (e.g. the IAM Authenticator) have releases that are fixed and are defined in the [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile).
+The way it works right now is that most utils are installed at a specific version driven by the variables set at the beginning of the Dockerfile. 
+
+The tool has not yet landed on a final strategy though. An alternative approach would be to grab the latest versions of the utilities at every build by querying `releases/latest ` in each repo and downloaded the latest release of the binary.  
 
 #### How can I use it?
 
