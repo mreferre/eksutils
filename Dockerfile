@@ -30,6 +30,9 @@ ENV NODE_VERSION=${NODE_VERSION}
 
 ################## BEGIN INSTALLATION ######################
 
+## This adds the script that checks the version of the tools and utilities installed
+ADD utilsversions.sh . 
+
 ## This will remove intermediate downloads between RUN steps as /tmp is out of the container FS
 VOLUME /tmp
 WORKDIR /tmp

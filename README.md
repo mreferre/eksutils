@@ -26,6 +26,11 @@ The way it works right now is that most utils are installed at a specific versio
 
 The tool has not yet landed on a final strategy though. An alternative approach would be to grab the latest versions of the utilities at every build by querying `releases/latest ` in each repo and downloaded the latest release of the binary.  
 
+The container image now ships with a script called `utilsversions.sh` that prints all the versions of the tools and utilities available in the container. You can run the script interactively at any point when you are inside the container by launching `/utilsversions.sh` or you can print it by running the following command:
+```
+docker run --rm mreferre/eksutils:latest /utilsversions.sh
+```
+
 #### How can I use it?
 
 The only pre-requisite for this to work is a Docker runtime. 
@@ -34,7 +39,7 @@ You have a few options. They cover common use cases but you can mix and match th
 
 ##### Option #1
 ```
-docker run -it --rm mreferre/eksutils:latest`
+docker run -it --rm mreferre/eksutils:latest
 ```
 Use this option if:
 
