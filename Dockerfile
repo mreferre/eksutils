@@ -161,5 +161,11 @@ RUN curl -sL https://run.solo.io/gloo/install | sh
 
 WORKDIR /
 
+############################################################
+########### Tools and Utilities versions checks ############
+############################################################
+
+RUN /utilsversions.sh
+
 CMD /bin/sh
 
