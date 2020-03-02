@@ -113,7 +113,7 @@ logger "green" "checking k9s..."
 k9s version
 errorcheck k9s
 logger "green" "checking docker..."
-docker version
+docker --version
 errorcheck docker
 logger "green" "checking docker-compose..."
 docker-compose --version
