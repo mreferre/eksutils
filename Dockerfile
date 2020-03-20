@@ -4,6 +4,8 @@ FROM ${FROM_IMAGE}:${FROM_TAG}
 MAINTAINER massimo@it20.info
 
 ################## SETUP VERSIONS ##########################
+ARG USER_NAME="eksutils"
+ARG USER_PASSWORD="p@$$w0d"
 ARG KUBE_RELEASE_VER=v1.17.3
 ARG NODE_VERSION=8.12.0
 ARG IAM_AUTH_VER=0.4.0
@@ -16,6 +18,9 @@ ARG OCTANT_VER=0.10.2
 ARG AWSCLI_URL_BASE=awscli.amazonaws.com
 ARG AWSCLI_URL_FILE=awscli-exe-linux-x86_64.zip
 ################## SETUP ENV ###############################
+ENV USER_NAME $USER_NAME
+ENV USER_PASSWORD $USER_PASSWORD
+ENV CONTAINER_IMAGE_VER=v1.0.0
 ### OCTANT
 # browser autostart at octant launch is disabled
 # ip address and port are modified (to better work with Cloud9)  
@@ -50,12 +55,26 @@ RUN yum update -y \
             vi \
             wget \
             which \
+            zsh \
+            wget \
+            fonts-powerline \
+            emacs-nox \
+            telnet \
+            nc \
+            iftop \
+            tshark \
+            tmux \
+            bind-utils \
+
  && yum clean all \
  && rm -rf /var/cache/yum
 
+
+
 ## Make python3 default
 RUN rm -f /usr/bin/python \
- && ln -s /usr/bin/python3 /usr/bin/python
+ && ln -s /usr/bin/python3 /usr/bin/python \
+ && sed -i 's$#!/usr/bin/python$#!/usr/bin/python2$' /usr/bin/yum
 
 ## This will remove intermediate downloads between RUN steps as /tmp is out of the container FS
 VOLUME /tmp
@@ -132,10 +151,46 @@ RUN curl -sL "https://github.com/docker/compose/releases/download/${DOCKER_COMPO
 
 # setup Octant
 RUN curl -sLo - https://github.com/vmware-tanzu/octant/releases/download/v${OCTANT_VER}/octant_${OCTANT_VER}_Linux-64bit.tar.gz |tar xfz - --strip-components=1 \
- && mv octant /usr/local/bin/octant 
+ && mv octant /usr/local/bin/octant
+
+
+# terminal colors with xterm
+ENV TERM xterm
+# set the zsh theme
+ENV ZSH_THEME agnoster
+
+# install oh-my-zsh
+RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
+
+# install Kubens / Kubectx
+RUN curl -sSLO https://github.com/aca/go-kubectx/releases/download/v0.1.0/go-kubectx_0.1.0_Linux_x86_64.tar.gz \
+    && tar zxvf go-kubectx_0.1.0_Linux_x86_64.tar.gz \
+    && mv kubectx kubens /usr/local/bin/ \
+    && rm README.md go-kubectx_0.1.0_Linux_x86_64.tar.gz
+
+
+RUN cd ~/.oh-my-zsh/custom/themes && git clone https://github.com/bhilburn/powerlevel9k.git
+
+
+RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf \
+    && yes | ~/.fzf/install
+
+RUN cd ~/.oh-my-zsh/custom/plugins/ \
+    && git clone https://github.com/zsh-users/zsh-autosuggestions \
+    && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+
 ##################### INSTALLATION END #####################
 
-WORKDIR /
+RUN useradd -ms /bin/bash $USER_NAME
+RUN cp -r ~/.oh-my-zsh /home/$USER_NAME/ \
+    && chown -R $USER_NAME:$USER_NAME /home/$USER_NAME
+# the user we're applying this too (otherwise it most likely install for root)
+USER $USER_NAME
+WORKDIR /home/$USER_NAME
 
-CMD /bin/sh
+COPY .zshrc /root/.zshrc
+COPY .zshrc /home/$USER_NAME/.zshrc
+
+
+CMD ["zsh"]
 
