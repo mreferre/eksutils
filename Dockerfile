@@ -151,7 +151,9 @@ RUN curl -sLo - https://github.com/vmware-tanzu/octant/releases/download/v${OCTA
  && mv octant /usr/local/bin/octant 
 
 # setup glooctl 
-RUN curl -sL https://run.solo.io/gloo/install | sh 
+RUN curl -sL https://run.solo.io/gloo/install | sh \
+ && mv $HOME/.gloo/bin/glooctl /usr/local/bin \
+ && rm -r $HOME/.gloo
 
 #########################
 ## end setup utilities ##
