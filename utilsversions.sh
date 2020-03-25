@@ -121,4 +121,6 @@ errorcheck docker-compose
 logger "green" "checking octant..."
 octant version 
 errorcheck octant 
-
+logger "green" "checking glooctl..."
+glooctl version 
+errorcheck glooctl 
