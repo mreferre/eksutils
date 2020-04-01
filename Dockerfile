@@ -1,13 +1,12 @@
 ARG FROM_IMAGE=amazonlinux
 ARG FROM_TAG=2.0.20200207.1
 FROM ${FROM_IMAGE}:${FROM_TAG}
-MAINTAINER massimo@it20.info
 
 ################## SETUP VERSIONS ##########################
 ARG USER_NAME="eksutils"
-ARG USER_PASSWORD="p@$$w0d"
 ARG KUBE_RELEASE_VER=v1.17.3
-ARG NODE_VERSION=8.12.0
+#ARG NODE_VERSION=8.12.0
+ARG NODE_VERSION=12.6.1
 ARG IAM_AUTH_VER=0.4.0
 ARG EKSUSER_VER=0.1.1
 ARG KUBECFG_VER=0.9.1
@@ -17,6 +16,7 @@ ARG DOCKER_COMPOSE_VER=1.25.4
 ARG OCTANT_VER=0.10.2
 ARG AWSCLI_URL_BASE=awscli.amazonaws.com
 ARG AWSCLI_URL_FILE=awscli-exe-linux-x86_64.zip
+ARG GOKUBECTX_VER=0.1.0 #https://github.com/aca/go-kubectx/releases
 ################## SETUP ENV ###############################
 ENV USER_NAME $USER_NAME
 ENV USER_PASSWORD $USER_PASSWORD
@@ -163,10 +163,10 @@ ENV ZSH_THEME agnoster
 RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true
 
 # install Kubens / Kubectx
-RUN curl -sSLO https://github.com/aca/go-kubectx/releases/download/v0.1.0/go-kubectx_0.1.0_Linux_x86_64.tar.gz \
-    && tar zxvf go-kubectx_0.1.0_Linux_x86_64.tar.gz \
+RUN curl -sSLO https://github.com/aca/go-kubectx/releases/download/v${GOKUBECTX_VER}/go-kubectx_${GOKUBECTX_VER}_Linux_x86_64.tar.gz \
+    && tar zxvf go-kubectx_${GOKUBECTX_VER}_Linux_x86_64.tar.gz \
     && mv kubectx kubens /usr/local/bin/ \
-    && rm README.md go-kubectx_0.1.0_Linux_x86_64.tar.gz
+    && rm README.md go-kubectx_${GOKUBECTX_VER}_Linux_x86_64.tar.gz
 
 
 RUN cd ~/.oh-my-zsh/custom/themes && git clone https://github.com/bhilburn/powerlevel9k.git
