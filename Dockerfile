@@ -6,7 +6,7 @@ FROM ${FROM_IMAGE}:${FROM_TAG}
 ARG USER_NAME="eksutils"
 ARG KUBE_RELEASE_VER=v1.17.3
 #ARG NODE_VERSION=8.12.0
-ARG NODE_VERSION=12.6.1
+ARG NODE_VERSION=v12.16.1
 ARG IAM_AUTH_VER=0.4.0
 ARG EKSUSER_VER=0.1.1
 ARG KUBECFG_VER=0.9.1
@@ -16,7 +16,8 @@ ARG DOCKER_COMPOSE_VER=1.25.4
 ARG OCTANT_VER=0.10.2
 ARG AWSCLI_URL_BASE=awscli.amazonaws.com
 ARG AWSCLI_URL_FILE=awscli-exe-linux-x86_64.zip
-ARG GOKUBECTX_VER=0.1.0 #https://github.com/aca/go-kubectx/releases
+#https://github.com/aca/go-kubectx/releases
+ARG GOKUBECTX_VER=0.1.0
 ################## SETUP ENV ###############################
 ENV USER_NAME $USER_NAME
 ENV USER_PASSWORD $USER_PASSWORD
@@ -28,8 +29,8 @@ ENV OCTANT_DISABLE_OPEN_BROWSER=1
 ENV OCTANT_LISTENER_ADDR="0.0.0.0:8080"
 ### NODE
 ENV NVM_DIR /usr/local/nvm
-ENV NODE_PATH $NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
-ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
+ENV NODE_PATH $NVM_DIR/versions/node/$NODE_VERSION/lib/node_modules
+ENV PATH      $NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH
 ENV NODE_VERSION=${NODE_VERSION}
 ################## BEGIN INSTALLATION ######################
 
@@ -65,7 +66,6 @@ RUN yum update -y \
             tshark \
             tmux \
             bind-utils \
-
  && yum clean all \
  && rm -rf /var/cache/yum
 
