@@ -112,7 +112,7 @@ RUN curl -sLo aws-iam-authenticator https://github.com/kubernetes-sigs/aws-iam-a
     && mv ./aws-iam-authenticator /usr/local/bin
 
 # setup Helm (latest at time of docker build)
-RUN curl -sLo get_helm.sh https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get \
+RUN curl -sLo get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 \
  && chmod +x get_helm.sh \
  && ./get_helm.sh
 

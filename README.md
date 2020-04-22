@@ -7,7 +7,7 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - [AWS CDK](https://github.com/awslabs/aws-cdk)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - [IAM Authenticator for AWS](https://github.com/kubernetes-sigs/aws-iam-authenticator)
-- [helm version 2](https://github.com/helm/helm)
+- [helm version 3](https://github.com/helm/helm)
 - [eksctl](https://github.com/weaveworks/eksctl)
 - [eksuser](https://github.com/prabhatsharma/eksuser/)
 - [kubecfg](https://github.com/ksonnet/kubecfg)
