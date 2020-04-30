@@ -15,6 +15,8 @@ ARG DOCKER_COMPOSE_VER=1.25.4
 ARG OCTANT_VER=0.10.2
 ARG AWSCLI_URL_BASE=awscli.amazonaws.com
 ARG AWSCLI_URL_FILE=awscli-exe-linux-x86_64.zip
+ARG KUBECTX_VER=0.9.0
+ARG KUBENS_VER=0.9.0
 
 ################## SETUP ENV ###############################
 ### OCTANT
@@ -130,6 +132,18 @@ RUN curl -sLo eksuser-linux-amd64.zip https://github.com/prabhatsharma/eksuser/r
 RUN curl -sLo kubecfg https://github.com/ksonnet/kubecfg/releases/download/v${KUBECFG_VER}/kubecfg-linux-amd64 \
     && chmod +x kubecfg \
     && mv kubecfg /usr/local/bin/kubecfg
+
+# setup kubectx
+RUN curl -sLo kubectx.tar.gz https://github.com/ahmetb/kubectx/releases/download/v${KUBECTX_VER}/kubectx_v${KUBECTX_VER}_linux_x86_64.tar.gz \
+    && tar -xvf kubectx.tar.gz \
+    && chmod +x kubectx \
+    && mv kubectx /usr/local/bin/kubectx
+
+# setup kubens
+RUN curl -sLo kubens.tar.gz https://github.com/ahmetb/kubectx/releases/download/v${KUBENS_VER}/kubens_v${KUBENS_VER}_linux_x86_64.tar.gz \
+    && tar -xvf kubens.tar.gz \
+    && chmod +x kubens \
+    && mv kubens /usr/local/bin/kubens
 
 # setup ksonnet 
 RUN curl -sLo - https://github.com/ksonnet/ksonnet/releases/download/v${KSONNET_VER}/ks_${KSONNET_VER}_linux_amd64.tar.gz |tar xfz - --strip-components=1 \
