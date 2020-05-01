@@ -123,4 +123,11 @@ octant version
 errorcheck octant 
 logger "green" "checking glooctl..."
 glooctl version 
-errorcheck glooctl 
+errorcheck glooctl
+logger "green" "checking kubectx..."
+kubectx -h
+errorcheck kubectx
+logger "green" "checking kubens..."
+kubens -h
+errorcheck kubens
+
