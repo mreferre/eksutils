@@ -16,6 +16,8 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - [docker-compose](https://docs.docker.com/compose/)
 - [Octant](https://github.com/vmware-tanzu/octant)
 - [glooctl](https://docs.solo.io/gloo/latest/)
+- [kubectx](https://github.com/ahmetb/kubectx/)
+- [kubens](https://github.com/ahmetb/kubectx/)
 - additional utils: unzip, jq, vi, wget, less, git, which and httpd-tools (and more, just in case) 
 
 `eksutils` includes the client side tooling and its dependencies as documented here in the [Amazon EKS Getting Started guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html). While this was built specifically for EKS, `eksutils` can also be used as a standard AWS CLI.
@@ -114,4 +116,4 @@ For the most part this would be similar to the Cloud9 scenario. The exception ma
 
 ##### Windows
 
-Feel free to contribute here if you have a pattern that works for you. 
+Feel free to contribute here if you have a pattern that works for you.
