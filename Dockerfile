@@ -94,6 +94,9 @@ RUN curl -s https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
 ## begin setup utilities ##
 ###########################
 
+# setup zsh (shell)
+RUN sh -c "$(wget -O- https://raw.githubusercontent.com/mreferre/zsh-in-docker/master/zsh-in-docker.sh)"
+
 # setup the aws cli v2 (latest at time of docker build)
 RUN curl -Ls "https://${AWSCLI_URL_BASE}/${AWSCLI_URL_FILE}" -o "awscliv2.zip" \
  && unzip awscliv2.zip \
