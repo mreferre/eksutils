@@ -3,6 +3,7 @@
 `eksutils` is a(n experimental) container shell environment which includes various tools and CLIs aimed at making it easier to consume an existing [Amazon EKS](https://aws.amazon.com/eks/) cluster. Note the utility today contains client tools that go beyond mere EKS and has evolved to support other container orchestrators (e.g. ECS), container runtimes (e.g. Docker) and the AWS platform in general (e.g. CDK).
 
 The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) for the `eksutils` container is based on an Amazon Linux OS image and it includes the following tools and utilities:
+- [Oh My Zsh](https://ohmyz.sh/) 
 - [AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) 
 - [AWS CDK](https://github.com/awslabs/aws-cdk)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
@@ -24,9 +25,9 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 
 The way it works right now is that most utils are installed at a specific version driven by the variables set at the beginning of the Dockerfile. 
 
-The tool has not yet landed on a final strategy though. An alternative approach would be to grab the latest versions of the utilities at every build by querying `releases/latest ` in each repo and downloaded the latest release of the binary.  
+The tool has not yet landed on a final strategy though. An alternative approach would be to grab the latest versions of the utilities at every build by querying `releases/latest` in each repo and downloaded the latest release of the binary.  
 
-The container image now ships with a script called `utilsversions.sh` that prints all the versions of the tools and utilities available in the container. You can run the script interactively at any point when you are inside the container by launching `/utilsversions.sh` or you can print it by running the following command:
+The container image now ships with a script called `utilsversions.sh` that prints, when possible, the versions of the tools and utilities available in the container. You can run the script interactively at any point when you are inside the container by launching `/utilsversions.sh` or you can print it by running the following command:
 ```
 docker run --rm mreferre/eksutils:latest /utilsversions.sh
 ```
@@ -35,7 +36,9 @@ docker run --rm mreferre/eksutils:latest /utilsversions.sh
 
 The only pre-requisite for this to work is a Docker runtime. 
 
-You have a few options. They cover common use cases but you can mix and match them based on your own needs. Have also a look at the `Scenarios` section below.
+You have a few options. They cover common use cases but you can mix and match them based on your own needs. Have also a look at the `Scenarios` section below. 
+
+A note on the shell: all options listed are interactive and, by default, they use `/bin/sh`. Recently `Oh My Zsh` has been added to the image and you can, experimentally, override the the shell command by using `/usr/bin/zsh` (or start the shell once you run the container).
 
 ##### Option #1
 ```
