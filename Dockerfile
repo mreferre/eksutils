@@ -59,6 +59,7 @@ RUN yum update -y \
             vi \
             wget \
             which \
+            procps-ng \
  && yum clean all \
  && rm -rf /var/cache/yum
 
