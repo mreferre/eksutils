@@ -47,6 +47,7 @@ WORKDIR /tmp
 # docker is being installed to support DinD scenarios (e.g. for being able to build)
 # httpd-tools include the ab tool (for benchmarking http end points)
 RUN yum update -y \
+ && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
  && yum install -y \
             git \
             httpd-tools \
@@ -60,6 +61,7 @@ RUN yum update -y \
             wget \
             which \
             procps-ng \
+            figlet \
  && yum clean all \
  && rm -rf /var/cache/yum
 
