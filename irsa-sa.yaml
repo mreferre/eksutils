@@ -1,0 +1,17 @@
+# To generate this file you can execute commented lines below.
+#POLICY_ARN=$(aws iam list-policies --query 'Policies[?PolicyName==`AdministratorAccess`].[Arn]' --output text)
+#CLUSTER_NAME=eksworkshop-eksctl
+#eksctl create iamserviceaccount \
+#    --name eksutils-admin \
+#    --namespace default \
+#    --cluster $CLUSTER_NAME \
+#    --attach-policy-arn $POLICY_ARN \
+#    --approve \
+#    --override-existing-serviceaccounts
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::382076407153:role/eksctl-eksworkshop-eksctl-addon-iamserviceac-Role1-166129JKBHYB
+  name: eksutils-admin
+  namespace: default

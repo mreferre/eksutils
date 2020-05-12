@@ -162,3 +162,4 @@ alias pip=pip3
 fpath=($fpath ~/.zsh/completion)
 
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
