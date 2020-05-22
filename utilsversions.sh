@@ -45,9 +45,18 @@ errorcheck yum
 logger "green" "checking git..."
 git version
 errorcheck git 
+logger "green" "checking sudo..."
+sudo -V # | head -n 1
+errorcheck sudo
+logger "green" "checking ab..."
+ab -V
+errorcheck ab
 logger "green" "checking jq..."
 jq --version
 errorcheck jq
+logger "green" "checking less..."
+less --version
+errorcheck less
 logger "green" "checking openssl..."
 openssl version
 errorcheck openssl
@@ -72,6 +81,9 @@ errorcheck wget
 logger "green" "checking which..."
 which --version # | head -n 1
 errorcheck which
+logger "green" "checking figlet..."
+figlet -v # | head -n 1
+errorcheck figlet
 
 # add-ons tools (pre-requisites for the actual utilities) 
 logger "green" "checking pip..."

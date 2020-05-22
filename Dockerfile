@@ -50,6 +50,7 @@ RUN yum update -y \
  && yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
  && yum install -y \
             git \
+            sudo \
             httpd-tools \
             jq \
             less \
