@@ -1,19 +1,35 @@
 version: 0.2
+env:
+  secrets-manager:
+    DOCKERHUBID: DOCKERHUBID:id
+    DOCKERHUBPWD: DOCKERHUBPWD:password
 phases:
   install:
     commands:
       - echo install step...
+      - ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text) 
+      - echo Account ID is $ACCOUNT_ID
+      - echo Region is $AWS_REGION
   pre_build:
     commands:
       - echo logging in to AWS ECR...
-      - $(aws ecr get-login --no-include-email --region us-west-2)
+      - $(aws ecr get-login --no-include-email --region $AWS_REGION)
+      - echo the Build Tag is $(echo $CODEBUILD_BUILD_ID | sed 's/:/-/') 
   build:
     commands:
       - echo build Docker image on `date`
       - docker build -t eksutils:$(echo $CODEBUILD_BUILD_ID | sed 's/:/-/') .
-      - docker tag eksutils:$(echo $CODEBUILD_BUILD_ID | sed 's/:/-/') 693935722839.dkr.ecr.us-west-2.amazonaws.com/eksutils:$(echo $CODEBUILD_BUILD_ID | sed 's/:/-/')
+      - docker tag eksutils:$(echo $CODEBUILD_BUILD_ID | sed 's/:/-/') $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/eksutils:$(echo $CODEBUILD_BUILD_ID | sed 's/:/-/')
+      - docker tag eksutils:$(echo $CODEBUILD_BUILD_ID | sed 's/:/-/') mreferre/eksutils:$(echo $CODEBUILD_BUILD_ID | sed 's/:/-/')
+      - docker tag eksutils:$(echo $CODEBUILD_BUILD_ID | sed 's/:/-/') mreferre/eksutils:latest
+      
   post_build:
     commands:
       - echo build Docker image complete `date`
       - echo push latest Docker images to ECR...
-      - docker push 693935722839.dkr.ecr.us-west-2.amazonaws.com/eksutils:$(echo $CODEBUILD_BUILD_ID | sed 's/:/-/')
+      - docker push $ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/eksutils:$(echo $CODEBUILD_BUILD_ID | sed 's/:/-/')
+      - echo login into Docker Hub...
+      - docker login --username=$DOCKERHUBID --password=$DOCKERHUBPWD
+      - docker push mreferre/eksutils:$(echo $CODEBUILD_BUILD_ID | sed 's/:/-/')
+      - docker push mreferre/eksutils:latest
+      
