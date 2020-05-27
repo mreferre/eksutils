@@ -17,6 +17,7 @@ ARG AWSCLI_URL_BASE=awscli.amazonaws.com
 ARG AWSCLI_URL_FILE=awscli-exe-linux-x86_64.zip
 ARG KUBECTX_VER=0.9.0
 ARG KUBENS_VER=0.9.0
+ARG VSCODESERVER_VER=3.3.1
 
 ################## SETUP ENV ###############################
 ### OCTANT
@@ -29,7 +30,8 @@ ENV NVM_DIR=/usr/local/nvm
 ENV NODE_PATH=$NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules
 ENV PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 ENV NODE_VERSION=${NODE_VERSION}
-
+### CODE-SERVER
+ENV PATH=/usr/local/bin/code-server/bin:$PATH
 ################## BEGIN INSTALLATION ######################
 
 ## This adds the script that checks the version of the tools and utilities installed
@@ -175,6 +177,10 @@ RUN curl -sLo - https://github.com/vmware-tanzu/octant/releases/download/v${OCTA
 RUN curl -sL https://run.solo.io/gloo/install | sh \
  && mv $HOME/.gloo/bin/glooctl /usr/local/bin \
  && rm -r $HOME/.gloo
+
+# setup VS Code server
+RUN curl -sSL https://github.com/cdr/code-server/releases/download/v${VSCODESERVER_VER}/code-server-${VSCODESERVER_VER}-linux-amd64.tar.gz | tar xfz - \
+ && mv code-server-${VSCODESERVER_VER}-linux-amd64 /usr/local/bin/code-server 
 
 #########################
 ## end setup utilities ##

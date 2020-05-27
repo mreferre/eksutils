@@ -19,6 +19,7 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - [glooctl](https://docs.solo.io/gloo/latest/)
 - [kubectx](https://github.com/ahmetb/kubectx/)
 - [kubens](https://github.com/ahmetb/kubectx/)
+- [VS Code server](https://github.com/cdr/code-server)
 - additional utils: unzip, jq, vi, wget, less, git, which and httpd-tools (and more, just in case) 
 
 `eksutils` includes the client side tooling and its dependencies as documented here in the [Amazon EKS Getting Started guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html). While this was built specifically for EKS, `eksutils` can also be used as a standard AWS CLI.
@@ -111,7 +112,7 @@ I rarely use `eksutils` from my Mac laptop but sometimes I do. When I do it, thi
 ```
 docker run -it --rm -p 8080:8080 -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube mreferre/eksutils:latest`
 ```
-Note I map the `.aws` directory and the `.kube` directory here too. In this case mapping the `.aws` direcory is useful if you intend to save your IAM credentials with `aws configure`. If you don't and you prefer to only enter them ephimerally every time `eksutils` is launched then omit that mapping. It's more work but definitely more secured. I don't usually map other directories but it's definitely an option. Note also that MacOS doesn't support `--network host` so I start it by mapping the port 8080 (in case I want to start `kubectl proxy`, Octant or any other service). 
+Note I map the `.aws` directory and the `.kube` directory here too. In this case mapping the `.aws` direcory is useful if you intend to save your IAM credentials with `aws configure`. If you don't and you prefer to only enter them ephimerally every time `eksutils` is launched then omit that mapping. It's more work but definitely more secured. I don't usually map other directories but it's definitely an option. Note also that MacOS doesn't support `--network host` so I start it by mapping the port 8080 (in case I want to start `kubectl proxy`, Octant, VS Code server or any other service). 
 
 ##### Linux
 

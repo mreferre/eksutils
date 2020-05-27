@@ -142,4 +142,6 @@ errorcheck kubectx
 logger "green" "checking kubens..."
 kubens -h
 errorcheck kubens
-
+logger "green" "checking code-server..."
+code-server --version
+errorcheck code-server
