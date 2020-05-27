@@ -19,6 +19,7 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - [glooctl](https://docs.solo.io/gloo/latest/)
 - [kubectx](https://github.com/ahmetb/kubectx/)
 - [kubens](https://github.com/ahmetb/kubectx/)
+- [bat](https://github.com/sharkdp/bat/)
 - [VS Code server](https://github.com/cdr/code-server)
 - additional utils: unzip, jq, vi, wget, less, git, which and httpd-tools (and more, just in case) 
 

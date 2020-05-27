@@ -17,6 +17,7 @@ ARG AWSCLI_URL_BASE=awscli.amazonaws.com
 ARG AWSCLI_URL_FILE=awscli-exe-linux-x86_64.zip
 ARG KUBECTX_VER=0.9.0
 ARG KUBENS_VER=0.9.0
+ARG BAT_VER=0.15.4
 ARG VSCODESERVER_VER=3.3.1
 
 ################## SETUP ENV ###############################
@@ -177,6 +178,10 @@ RUN curl -sLo - https://github.com/vmware-tanzu/octant/releases/download/v${OCTA
 RUN curl -sL https://run.solo.io/gloo/install | sh \
  && mv $HOME/.gloo/bin/glooctl /usr/local/bin \
  && rm -r $HOME/.gloo
+
+# setup bat
+RUN curl -sSL https://github.com/sharkdp/bat/releases/download/v${BAT_VER}/bat-v${BAT_VER}-x86_64-unknown-linux-gnu.tar.gz | tar xfz - \
+ && mv ./bat-v${BAT_VER}-x86_64-unknown-linux-gnu/bat /usr/local/bin
 
 # setup VS Code server
 RUN curl -sSL https://github.com/cdr/code-server/releases/download/v${VSCODESERVER_VER}/code-server-${VSCODESERVER_VER}-linux-amd64.tar.gz | tar xfz - \
