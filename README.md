@@ -6,6 +6,7 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - [Oh My Zsh](https://ohmyz.sh/) 
 - [AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) 
 - [AWS CDK](https://github.com/awslabs/aws-cdk)
+- [CDK8s](https://cdk8s.io/)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - [IAM Authenticator for AWS](https://github.com/kubernetes-sigs/aws-iam-authenticator)
 - [helm version 3](https://github.com/helm/helm)

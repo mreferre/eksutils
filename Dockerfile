@@ -110,8 +110,11 @@ RUN curl -Ls "https://${AWSCLI_URL_BASE}/${AWSCLI_URL_FILE}" -o "awscliv2.zip" \
  && ./aws/install \
  && /usr/local/bin/aws --version
 
-# setup the aws cdk (latest at time of docker build)
+# setup the aws cdk cli (latest at time of docker build)
 RUN npm i -g aws-cdk
+
+# setup the cdk8s cli (latest at time of docker build)
+RUN npm i -g cdk8s-cli
 
 # setup kubectl (latest at time of docker build)
 RUN curl -sLO https://storage.googleapis.com/kubernetes-release/release/${KUBE_RELEASE_VER}/bin/linux/amd64/kubectl \

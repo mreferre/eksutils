@@ -99,6 +99,9 @@ aws --version
 errorcheck aws
 logger "green" "checking cdk..."
 cdk --version
+errorcheck cdk8s 
+logger "green" "checking cdk8s..."
+cdk8s --version
 errorcheck cdk 
 logger "green" "checking kubectl..."
 kubectl version --client=true 
