@@ -55,6 +55,7 @@ RUN yum update -y \
             git \
             sudo \
             httpd-tools \
+            iputils \
             jq \
             less \
             openssl \
