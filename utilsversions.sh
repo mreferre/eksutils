@@ -133,6 +133,9 @@ errorcheck docker
 logger "green" "checking docker-compose..."
 docker-compose --version
 errorcheck docker-compose
+logger "green" "checking kind..."
+kind --version
+errorcheck kind
 logger "green" "checking octant..."
 octant version 
 errorcheck octant 

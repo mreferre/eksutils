@@ -12,6 +12,7 @@ ARG KUBECFG_VER=0.9.1
 ARG KSONNET_VER=0.13.1
 ARG K9S_VER=0.3.0
 ARG DOCKER_COMPOSE_VER=1.25.4
+ARG KIND_VER=0.8.1
 ARG OCTANT_VER=0.10.2
 ARG AWSCLI_URL_BASE=awscli.amazonaws.com
 ARG AWSCLI_URL_FILE=awscli-exe-linux-x86_64.zip
@@ -173,6 +174,11 @@ RUN amazon-linux-extras install docker -y
 # setup docker-compose 
 RUN curl -sL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VER}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose 
+
+# setup kind 
+RUN curl -Lo ./kind https://kind.sigs.k8s.io/dl/v${KIND_VER}/kind-linux-amd64 \
+    && chmod +x ./kind \
+    && mv ./kind /usr/local/bin/kind
 
 # setup Octant
 RUN curl -sLo - https://github.com/vmware-tanzu/octant/releases/download/v${OCTANT_VER}/octant_${OCTANT_VER}_Linux-64bit.tar.gz |tar xfz - --strip-components=1 \
