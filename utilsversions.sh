@@ -134,7 +134,7 @@ logger "green" "checking docker-compose..."
 docker-compose --version
 errorcheck docker-compose
 logger "green" "checking docker-ecs..."
-docker ecs version
+export DOCKER_CLI_EXPERIMENTAL=enabled && docker ecs version
 errorcheck docker-ecs
 logger "green" "checking kind..."
 kind --version
