@@ -133,6 +133,9 @@ errorcheck docker
 logger "green" "checking docker-compose..."
 docker-compose --version
 errorcheck docker-compose
+logger "green" "checking docker-ecs..."
+docker ecs version
+errorcheck docker-ecs
 logger "green" "checking kind..."
 kind --version
 errorcheck kind

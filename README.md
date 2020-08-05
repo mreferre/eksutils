@@ -17,6 +17,7 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - [k9s](https://k9ss.io/)
 - [docker](https://docs.docker.com/engine/)
 - [docker-compose](https://docs.docker.com/compose/)
+- [docker-ecs](https://docs.docker.com/engine/context/ecs-integration/)
 - [kind](https://kind.sigs.k8s.io/)
 - [Octant](https://github.com/vmware-tanzu/octant)
 - [glooctl](https://docs.solo.io/gloo/latest/)
