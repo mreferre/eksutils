@@ -15,6 +15,7 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - [kubecfg](https://github.com/ksonnet/kubecfg)
 - [ksonnet](https://github.com/ksonnet/ksonnet)
 - [k9s](https://k9ss.io/)
+- [docker](https://docs.docker.com/engine/)
 - [docker-compose](https://docs.docker.com/compose/)
 - [kind](https://kind.sigs.k8s.io/)
 - [Octant](https://github.com/vmware-tanzu/octant)
