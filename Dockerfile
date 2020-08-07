@@ -60,6 +60,7 @@ RUN yum update -y \
             jq \
             less \
             openssl \
+            openssl11 \
             python3 \
             tar \
             unzip \
