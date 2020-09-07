@@ -113,6 +113,9 @@ RUN curl -Ls "https://${AWSCLI_URL_BASE}/${AWSCLI_URL_FILE}" -o "awscliv2.zip" \
  && ./aws/install \
  && /usr/local/bin/aws --version
 
+ # setup the eb cli (latest at time of docker build)
+RUN pip install awsebcli –upgrade 
+
 # setup the aws cdk cli (latest at time of docker build)
 RUN npm i -g aws-cdk
 

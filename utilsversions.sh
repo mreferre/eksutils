@@ -97,6 +97,9 @@ errorcheck node
 logger "green" "checking aws..."
 aws --version
 errorcheck aws
+logger "green" "checking eb..."
+eb --version
+errorcheck eb
 logger "green" "checking cdk..."
 cdk --version
 errorcheck cdk8s 
