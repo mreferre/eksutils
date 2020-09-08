@@ -26,7 +26,7 @@ The [Dockerfile](https://github.com/mreferre/eksutils/blob/master/Dockerfile) fo
 - [kubens](https://github.com/ahmetb/kubectx/)
 - [bat](https://github.com/sharkdp/bat/)
 - [VS Code server](https://github.com/cdr/code-server)
-- additional utils: unzip, jq, vi, wget, less, git, which and httpd-tools (and more, just in case) 
+- additional utils: unzip, jq, vi, wget, less, git, yarn, which and httpd-tools (and more, just in case) 
 
 `eksutils` includes the client side tooling and its dependencies as documented here in the [Amazon EKS Getting Started guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html). While this was built specifically for EKS, `eksutils` can also be used as a standard AWS CLI.
 

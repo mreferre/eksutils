@@ -69,6 +69,8 @@ RUN yum update -y \
             which \
             procps-ng \
             figlet \
+ && curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo \
+    && yum install -y yarn \
  && yum clean all \
  && rm -rf /var/cache/yum
 

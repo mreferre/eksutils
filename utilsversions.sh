@@ -45,6 +45,9 @@ errorcheck yum
 logger "green" "checking git..."
 git version
 errorcheck git 
+logger "green" "checking yarn..."
+yarn --version
+errorcheck yarn 
 logger "green" "checking sudo..."
 sudo -V # | head -n 1
 errorcheck sudo
