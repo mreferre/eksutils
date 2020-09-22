@@ -181,11 +181,6 @@ RUN amazon-linux-extras install docker -y
 RUN curl -sL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VER}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose 
 
-# setup docker-ecs (beta) - requires DOCKER_CLI_EXPERIMENTAL=enabled 
-RUN mkdir -p /usr/local/lib/docker/cli-plugins \
-    && curl -sL "https://github.com/docker/ecs-plugin/releases/latest/download/docker-ecs-linux-amd64" -o /usr/local/lib/docker/cli-plugins/docker-ecs \
-    && chmod +x /usr/local/lib/docker/cli-plugins/docker-ecs
-
 # setup kind 
 RUN curl -Lo ./kind https://kind.sigs.k8s.io/dl/v${KIND_VER}/kind-linux-amd64 \
     && chmod +x ./kind \
