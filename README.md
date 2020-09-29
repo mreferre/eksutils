@@ -4,12 +4,16 @@
 
 `eksutils` is a(n experimental) container shell environment which includes various tools and CLIs aimed at making it easier to consume an existing [Amazon EKS](https://aws.amazon.com/eks/) cluster. Note the utility today contains client tools that go beyond mere EKS and has evolved to support other container orchestrators (e.g. ECS), container runtimes (e.g. Docker) and the AWS platform in general (e.g. CDK).
 
+
 The [Dockerfile](https://github.com/allamand/eksutils/blob/master/Dockerfile) for the `eksutils` container is based on an Amazon Linux OS image and it includes the following tools and utilities:
+
+- [Oh My Zsh](https://ohmyz.sh/) 
 - [AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) 
 - [AWS CDK](https://github.com/awslabs/aws-cdk)
+- [CDK8s](https://cdk8s.io/)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - [IAM Authenticator for AWS](https://github.com/kubernetes-sigs/aws-iam-authenticator)
-- [helm](https://github.com/helm/helm)
+- [helm version 3](https://github.com/helm/helm)
 - [eksctl](https://github.com/weaveworks/eksctl)
 - [eksuser](https://github.com/prabhatsharma/eksuser/)
 - [kubecfg](https://github.com/ksonnet/kubecfg)
@@ -17,19 +21,33 @@ The [Dockerfile](https://github.com/allamand/eksutils/blob/master/Dockerfile) fo
 - [k9s](https://k9ss.io/)
 - [docker-compose](https://docs.docker.com/compose/)
 - [Octant](https://github.com/vmware-tanzu/octant)
-- additional utils: unzip, jq, vi, wget, less, git, which, docker and httpd-tools (just in case) 
+- [glooctl](https://docs.solo.io/gloo/latest/)
+- [kubectx](https://github.com/ahmetb/kubectx/)
+- [kubens](https://github.com/ahmetb/kubectx/)
+- [bat](https://github.com/sharkdp/bat/)
+- [VS Code server](https://github.com/cdr/code-server)
+- additional utils: unzip, jq, vi, wget, less, git, which and httpd-tools (and more, just in case) 
 
 `eksutils` includes the client side tooling and its dependencies as documented here in the [Amazon EKS Getting Started guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html). While this was built specifically for EKS, `eksutils` can also be used as a standard AWS CLI.
 
 #### What's the version of the utilities included?
 
-With exception of Node, IAM Authenticator, eksuser, kubecfg, k9s and docker-compose, all the other components are installed using the *latest version* available at the time of the docker build. For this reason the date for the build is going to be used as the `tag` for the container image. A few utilities (e.g. the IAM Authenticator) have releases that are fixed and are defined in the [Dockerfile](https://github.com/allamand/eksutils/blob/master/Dockerfile).
+The way it works right now is that most utils are installed at a specific version driven by the variables set at the beginning of the Dockerfile. 
+
+The tool has not yet landed on a final strategy though. An alternative approach would be to grab the latest versions of the utilities at every build by querying `releases/latest` in each repo and downloaded the latest release of the binary.  
+
+The container image now ships with a script called `utilsversions.sh` that prints, when possible, the versions of the tools and utilities available in the container. You can run the script interactively at any point when you are inside the container by launching `/utilsversions.sh` or you can print it by running the following command:
+```
+docker run --rm mreferre/eksutils:latest /utilsversions.sh
+```
 
 #### How can I use it?
 
 The only pre-requisite for this to work is a Docker runtime. 
 
-You have a few options. They cover common use cases but you can mix and match them based on your own needs. Have also a look at the `Scenarios` section below.
+You have a few options. They cover common use cases but you can mix and match them based on your own needs. Have also a look at the `Scenarios` section below. 
+
+A note on the shell: all options listed are interactive and, by default, they use `/bin/sh`. Recently `Oh My Zsh` has been added to the image and you can, experimentally, override the the shell command by using `/usr/bin/zsh` (or start the shell once you run the container).
 
 ##### Option #1
 ```
@@ -100,7 +118,7 @@ I rarely use `eksutils` from my Mac laptop but sometimes I do. When I do it, thi
 ```
 docker run -it --rm -p 8080:8080 -v $HOME/.aws:/root/.aws -v $HOME/.kube:/root/.kube allamand/eksutils:latest`
 ```
-Note I map the `.aws` directory and the `.kube` directory here too. In this case mapping the `.aws` direcory is useful if you intend to save your IAM credentials with `aws configure`. If you don't and you prefer to only enter them ephimerally every time `eksutils` is launched then omit that mapping. It's more work but definitely more secured. I don't usually map other directories but it's definitely an option. Note also that MacOS doesn't support `--network host` so I start it by mapping the port 8080 (in case I want to start `kubectl proxy`, Octant or any other service). 
+Note I map the `.aws` directory and the `.kube` directory here too. In this case mapping the `.aws` direcory is useful if you intend to save your IAM credentials with `aws configure`. If you don't and you prefer to only enter them ephimerally every time `eksutils` is launched then omit that mapping. It's more work but definitely more secured. I don't usually map other directories but it's definitely an option. Note also that MacOS doesn't support `--network host` so I start it by mapping the port 8080 (in case I want to start `kubectl proxy`, Octant, VS Code server or any other service). 
 
 ##### Linux
 
@@ -108,4 +126,4 @@ For the most part this would be similar to the Cloud9 scenario. The exception ma
 
 ##### Windows
 
-Feel free to contribute here if you have a pattern that works for you. 
+Feel free to contribute here if you have a pattern that works for you.
