@@ -1,0 +1,54 @@
+# This creates service-account Admin in the cluster
+# If you need, you can check for irsa-sa.yaml for example instruction to have a IRSA service-account with AWS policies
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: eksutils-admin
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: eksutils-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: eksutils-admin
+  namespace: default
+---
+apiVersion: v1
+kind: Pod
+metadata:
+    name: eksutils-pod-fargate
+    namespace: default
+    labels: 
+      app: eksutils-pod-fargate
+      eks.amazonaws.com/fargate-profile: eksutils-pod-fargate
+spec:
+  containers:
+  - name: eksutils
+    image: allamand/eksutils:latest
+    command:
+      - tail
+      - -f
+      - /dev/null
+    ports:
+    - containerPort: 8080
+      name: http
+      protocol: TCP
+    resources:
+      requests:
+        cpu: 300m
+        memory: 512Mi
+  enableServiceLinks: true
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext:
+    fsGroup: 1000
+    runAsUser: 1000
+  serviceAccount: default
+  serviceAccountName: eksutils-admin
+  schedulerName: fargate-scheduler
