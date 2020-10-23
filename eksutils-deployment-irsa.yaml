@@ -64,6 +64,9 @@ spec:
       serviceAccount: k8s-101-role
       serviceAccountName: k8s-101-role
       terminationGracePeriodSeconds: 0
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
