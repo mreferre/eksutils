@@ -32,6 +32,12 @@ spec:
           - tail
           - -f
           - /dev/null
+    #  - env:
+    #    - name: WORDPRESS_DATABASE_PASSWORD
+    #      valueFrom:
+    #        secretKeyRef:
+    #          key: mariadb-password
+    #          name: wordpress-rds-externaldb
         ports:
         - containerPort: 8080
           name: http
@@ -40,12 +46,25 @@ spec:
           requests:
             cpu: 300m
             memory: 512Mi
+#        volumeMounts:
+#        - mountPath: /bitnami/wordpress
+#          name: wordpress-data
+#          subPath: wordpress
+#          readOnly: true
       enableServiceLinks: true
       restartPolicy: Always
       schedulerName: default-scheduler
-      serviceAccount: k8s-101-role
+#To work with other username
+#      securityContext:
+#        fsGroup: 1001
+#        runAsUser: 1001
+      serviceAccount: default
       serviceAccountName: k8s-101-role
       terminationGracePeriodSeconds: 0
+    #  volumes:
+    #  - name: wordpress-data
+    #    persistentVolumeClaim:
+    #      claimName: wordpress-rds
 ---
 kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
