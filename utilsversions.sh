@@ -45,6 +45,9 @@ errorcheck yum
 logger "green" "checking git..."
 git version
 errorcheck git 
+logger "green" "checking yarn..."
+yarn --version
+errorcheck yarn 
 logger "green" "checking sudo..."
 sudo -V # | head -n 1
 errorcheck sudo
@@ -97,6 +100,9 @@ errorcheck node
 logger "green" "checking aws..."
 aws --version
 errorcheck aws
+logger "green" "checking eb..."
+eb --version
+errorcheck eb
 logger "green" "checking cdk..."
 cdk --version
 errorcheck cdk8s 
@@ -133,9 +139,6 @@ errorcheck docker
 logger "green" "checking docker-compose..."
 docker-compose --version
 errorcheck docker-compose
-logger "green" "checking docker-ecs..."
-export DOCKER_CLI_EXPERIMENTAL=enabled && docker ecs version
-errorcheck docker-ecs
 logger "green" "checking kind..."
 kind --version
 errorcheck kind

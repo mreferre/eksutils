@@ -9,6 +9,7 @@ The [Dockerfile](https://github.com/allamand/eksutils/blob/master/Dockerfile) fo
 
 - [Oh My Zsh](https://ohmyz.sh/) 
 - [AWS CLI version 2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) 
+- [AWS Elastic Beanstalk CLI](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install-advanced.html) 
 - [AWS CDK](https://github.com/awslabs/aws-cdk)
 - [CDK8s](https://cdk8s.io/)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
@@ -19,14 +20,16 @@ The [Dockerfile](https://github.com/allamand/eksutils/blob/master/Dockerfile) fo
 - [kubecfg](https://github.com/ksonnet/kubecfg)
 - [ksonnet](https://github.com/ksonnet/ksonnet)
 - [k9s](https://k9ss.io/)
+- [docker](https://docs.docker.com/engine/)
 - [docker-compose](https://docs.docker.com/compose/)
+- [kind](https://kind.sigs.k8s.io/)
 - [Octant](https://github.com/vmware-tanzu/octant)
 - [glooctl](https://docs.solo.io/gloo/latest/)
 - [kubectx](https://github.com/ahmetb/kubectx/)
 - [kubens](https://github.com/ahmetb/kubectx/)
 - [bat](https://github.com/sharkdp/bat/)
 - [VS Code server](https://github.com/cdr/code-server)
-- additional utils: unzip, jq, vi, wget, less, git, which and httpd-tools (and more, just in case) 
+- additional utils: unzip, jq, vi, wget, less, git, yarn, which and httpd-tools (and more, just in case) 
 
 `eksutils` includes the client side tooling and its dependencies as documented here in the [Amazon EKS Getting Started guide](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html). While this was built specifically for EKS, `eksutils` can also be used as a standard AWS CLI.
 

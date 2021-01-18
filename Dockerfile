@@ -84,6 +84,8 @@ RUN yum update -y \
             bind-utils \
             procps-ng \
             figlet \
+ && curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo \
+    && yum install -y yarn \
  && yum clean all \
  && rm -rf /var/cache/yum
 
@@ -130,13 +132,16 @@ RUN curl -s https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
 ###########################
 
 # setup zsh (shell)
-#RUN sh -c "$(wget -O- https://raw.githubusercontent.com/mreferre/zsh-in-docker/master/zsh-in-docker.sh)"
+RUN sh -c "$(wget -O- https://raw.githubusercontent.com/deluan/zsh-in-docker/master/zsh-in-docker.sh)"
 
 # setup the aws cli v2 (latest at time of docker build)
 RUN curl -Ls "https://${AWSCLI_URL_BASE}/${AWSCLI_URL_FILE}" -o "awscliv2.zip" \
  && unzip awscliv2.zip \
  && ./aws/install \
  && /usr/local/bin/aws --version
+
+ # setup the eb cli (latest at time of docker build)
+RUN pip install awsebcli --upgrade 
 
 # setup the aws cdk cli (latest at time of docker build)
 RUN npm i -g aws-cdk
@@ -203,12 +208,7 @@ RUN sudo PYTHON=python2 amazon-linux-extras install docker -y
 RUN curl -sL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VER}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose 
 
-# setup docker-ecs (beta) - requires DOCKER_CLI_EXPERIMENTAL=enabled
-RUN mkdir -p /usr/local/lib/docker/cli-plugins \
-    && curl -sL "https://github.com/docker/ecs-plugin/releases/latest/download/docker-ecs-linux-amd64" -o /usr/local/lib/docker/cli-plugins/docker-ecs \
-    && chmod +x /usr/local/lib/docker/cli-plugins/docker-ecs
-
-# setup kind
+# setup kind 
 RUN curl -Lo ./kind https://kind.sigs.k8s.io/dl/v${KIND_VER}/kind-linux-amd64 \
     && chmod +x ./kind \
     && mv ./kind /usr/local/bin/kind
