@@ -7,10 +7,10 @@ ARG USER_NAME="eksutils"
 ARG KUBE_RELEASE_VER=v1.17.3
 ARG NODE_VERSION=12.16.2
 ARG IAM_AUTH_VER=0.4.0
-ARG EKSUSER_VER=0.1.1
-ARG KUBECFG_VER=0.9.1
+ARG EKSUSER_VER=0.2.1
+ARG KUBECFG_VER=0.16.0
 ARG KSONNET_VER=0.13.1
-ARG K9S_VER=0.3.0
+ARG K9S_VER=0.19.2
 ARG DOCKER_COMPOSE_VER=1.25.4
 ARG KIND_VER=0.8.1
 ARG OCTANT_VER=0.10.2
@@ -23,13 +23,14 @@ ARG KUBENS_VER=0.9.0
 ARG BAT_VER=0.15.4
 ARG VSCODESERVER_VER=3.3.1
 
+ARG AWS_CDK_VERSION=1.31.0
 ################## SETUP ENV ###############################
 ENV USER_NAME $USER_NAME
 ENV USER_PASSWORD $USER_PASSWORD
 ENV CONTAINER_IMAGE_VER=v1.0.0
 ### OCTANT
 # browser autostart at octant launch is disabled
-# ip address and port are modified (to better work with Cloud9)  
+# ip address and port are modified (to better work with Cloud9)
 ENV OCTANT_DISABLE_OPEN_BROWSER=1
 ENV OCTANT_LISTENER_ADDR="0.0.0.0:8080"
 ### NODE
@@ -72,7 +73,6 @@ RUN yum update -y \
             vi \
             wget \
             which \
-            zsh \
             wget \
             fonts-powerline \
             emacs-nox \
@@ -90,7 +90,7 @@ RUN yum update -y \
  && rm -rf /var/cache/yum
 
 
-### Make python3 default
+##### Make python3 default
 RUN rm -f /usr/bin/python \
  && ln -s /usr/bin/python3 /usr/bin/python 
 
@@ -120,9 +120,9 @@ RUN mkdir -p ${NVM_DIR} \
 RUN npm install -g typescript
 
 # setup pip (latest at time of docker build)
-RUN curl -s https://bootstrap.pypa.io/get-pip.py -o get-pip.py \ 
+RUN curl -s https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
    && python get-pip.py
- 
+
 ########################################
 ### end setup runtime pre-requisites ###
 ########################################
@@ -145,6 +145,19 @@ RUN pip install awsebcli --upgrade
 
 # setup the aws cdk cli (latest at time of docker build)
 RUN npm i -g aws-cdk
+# setup the aws cdk (latest at time of docker build)
+RUN npm i -g aws-cdk@$AWS_CDK_VERSION \
+    && pip install --upgrade aws-cdk.core==$AWS_CDK_VERSION \
+    aws-cdk.aws_ecs_patterns==$AWS_CDK_VERSION \
+    aws-cdk.aws_ec2==$AWS_CDK_VERSION \
+    aws-cdk.aws_ecs==$AWS_CDK_VERSION \
+    aws-cdk.aws_servicediscovery==$AWS_CDK_VERSION \
+    aws_cdk.aws_iam==$AWS_CDK_VERSION \
+    aws_cdk.aws_efs==$AWS_CDK_VERSION \
+    awscli \
+    awslogs
+
+
 
 # setup the cdk8s cli (latest at time of docker build)
 RUN npm i -g cdk8s-cli
@@ -191,22 +204,20 @@ RUN curl -sLo kubens.tar.gz https://github.com/ahmetb/kubectx/releases/download/
     && chmod +x kubens \
     && mv kubens /usr/local/bin/kubens
 
-# setup ksonnet 
+# setup ksonnet
 RUN curl -sLo - https://github.com/ksonnet/ksonnet/releases/download/v${KSONNET_VER}/ks_${KSONNET_VER}_linux_amd64.tar.gz |tar xfz - --strip-components=1 \
    && mv ks /usr/bin/ks
 
-# setup k9s 
-RUN curl -sLo - https://github.com/derailed/k9s/releases/download/${K9S_VER}/k9s_${K9S_VER}_Linux_x86_64.tar.gz |tar xfz - \
-    && mv k9s /usr/local/bin/k9s 
+# setup k9s
+RUN curl -sLo - https://github.com/derailed/k9s/releases/download/v${K9S_VER}/k9s_Linux_x86_64.tar.gz |tar xfz - \
+    && mv k9s /usr/local/bin/k9s
 
 # setup docker
-#hack https://superuser.com/questions/1450590/amazon-ec2-ami-linux2-amazon-linux-extras-basearch-error
-RUN sed -i 's/("basearch", None)/("basearch", "x86_64")/' /usr/lib/python2.7/site-packages/amazon_linux_extras/software_catalog.py
-RUN sudo PYTHON=python2 amazon-linux-extras install docker -y
+RUN PYTHON=python2 amazon-linux-extras install docker -y
 
-# setup docker-compose 
+# setup docker-compose
 RUN curl -sL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VER}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
-    && chmod +x /usr/local/bin/docker-compose 
+    && chmod +x /usr/local/bin/docker-compose
 
 # setup kind 
 RUN curl -Lo ./kind https://kind.sigs.k8s.io/dl/v${KIND_VER}/kind-linux-amd64 \
@@ -270,7 +281,9 @@ RUN cd ~/.oh-my-zsh/custom/plugins/ \
 
 RUN useradd -ms /bin/bash $USER_NAME
 RUN cp -r ~/.oh-my-zsh /home/$USER_NAME/ \
-    && chown -R $USER_NAME:$USER_NAME /home/$USER_NAME
+    && chown -R $USER_NAME:$USER_NAME /home/$USER_NAME \
+    # Enable scrolling in zsh in cloud9
+    && sed -i -e "s/echoti smkx/#echoti smkx/" ~/.oh-my-zsh/lib/key-bindings.zsh
 # the user we're applying this too (otherwise it most likely install for root)
 USER $USER_NAME
 WORKDIR /home/$USER_NAME
