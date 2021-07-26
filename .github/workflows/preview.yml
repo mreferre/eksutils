@@ -1,0 +1,22 @@
+name: preview-bot
+
+on:
+  pull_request:
+    #types: [synchronize, labeled, unlabeled, reopened, closed]
+    types: [opened, synchronize, labeled, unlabeled, reopened, closed]
+
+env:
+  PREVIEW_STACK_NAME: preview-${{ github.event.repository.owner.login }}-${{ github.event.repository.name }}-pr-${{ github.event.number }}
+  AWS_DEFAULT_REGION: eu-west-1
+
+jobs:
+  Build:
+    if: "github.event.action != 'closed'"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        id: build
+        run: |
+          docker build -t local .
