@@ -21,9 +21,11 @@ ARG GOKUBECTX_VER=0.1.0
 ARG KUBECTX_VER=0.9.0
 ARG KUBENS_VER=0.9.0
 ARG BAT_VER=0.15.4
-ARG VSCODESERVER_VER=3.3.1
+ARG VSCODESERVER_VER=3.9.2
+ARG AWS_CDK_VERSION=1.115.0
 
-ARG AWS_CDK_VERSION=1.31.0
+ARG FLUXCTL_VERSION=1.22.1
+
 ################## SETUP ENV ###############################
 ENV USER_NAME $USER_NAME
 ENV USER_PASSWORD $USER_PASSWORD
@@ -77,6 +79,7 @@ RUN yum update -y \
             fonts-powerline \
             emacs-nox \
             telnet \
+            net-tools \
             nc \
             iftop \
             tshark \
@@ -84,6 +87,7 @@ RUN yum update -y \
             bind-utils \
             procps-ng \
             figlet \
+            iproute \
  && curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | sudo tee /etc/yum.repos.d/yarn.repo \
     && yum install -y yarn \
  && yum clean all \
@@ -91,12 +95,11 @@ RUN yum update -y \
 
 
 ##### Make python3 default
-RUN rm -f /usr/bin/python \
- && ln -s /usr/bin/python3 /usr/bin/python 
-
+#RUN ln -sf /usr/bin/python3 /usr/bin/python 
+#sudo ln -sf /usr/bin/python2.7 /usr/bin/python
 # Fix Yum after python3 installation
-RUN sed -i 's$#!/usr/bin/python$#!/usr/bin/python2$' /usr/bin/yum \
- && sed -i 's$#! /usr/bin/python$#!/usr/bin/python2$' /usr/libexec/urlgrabber-ext-down 
+#RUN sed -i 's$#!/usr/bin/python$#!/usr/bin/python2.7$' /usr/bin/yum \
+# && sed -i 's$#! /usr/bin/python$#!/usr/bin/python2$' /usr/libexec/urlgrabber-ext-down 
 
 ####################################
 ## end setup add-on systems tools ##
@@ -121,7 +124,7 @@ RUN npm install -g typescript
 
 # setup pip (latest at time of docker build)
 RUN curl -s https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
-   && python get-pip.py
+   && PYTHON=python3 python3 get-pip.py
 
 ########################################
 ### end setup runtime pre-requisites ###
@@ -264,14 +267,23 @@ RUN curl -sSLO https://github.com/aca/go-kubectx/releases/download/v${GOKUBECTX_
 RUN curl -Lo ec2-instance-selector https://github.com/aws/amazon-ec2-instance-selector/releases/download/v2.0.1/ec2-instance-selector-`uname | tr '[:upper:]' '[:lower:]'`-amd64 && chmod +x ec2-instance-selector \
   && mv ec2-instance-selector /usr/local/bin
 
-RUN cd ~/.oh-my-zsh/custom/themes && git clone https://github.com/bhilburn/powerlevel9k.git
+#RUN cd ~/.oh-my-zsh/custom/themes && git clone https://github.com/bhilburn/powerlevel9k.git
+RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
 
 RUN git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf \
     && yes | ~/.fzf/install
 
+RUN curl -Lo fluxctl https://github.com/fluxcd/flux/releases/download/${FLUXCTL_VERSION}/fluxctl_linux_amd64 \
+    && chmod 755 fluxctl \
+    && mv fluxctl /usr/local/bin
+
 RUN cd ~/.oh-my-zsh/custom/plugins/ \
     && git clone https://github.com/zsh-users/zsh-autosuggestions \
     && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
+
+#install vegeta http injector
+RUN cd /tmp; wget https://github.com/tsenart/vegeta/releases/download/v12.8.4/vegeta_12.8.4_linux_amd64.tar.gz \
+    && tar zxvf vegeta_12.8.4_linux_amd64.tar.gz && mv vegeta /usr/local/bin/
 
 #########################
 ## end setup utilities ##
@@ -285,12 +297,14 @@ RUN cp -r ~/.oh-my-zsh /home/$USER_NAME/ \
     # Enable scrolling in zsh in cloud9
     && sed -i -e "s/echoti smkx/#echoti smkx/" ~/.oh-my-zsh/lib/key-bindings.zsh
 # the user we're applying this too (otherwise it most likely install for root)
-USER $USER_NAME
+
 WORKDIR /home/$USER_NAME
 
 COPY .zshrc /root/.zshrc
 COPY .zshrc /home/$USER_NAME/.zshrc
 
+RUN sed -i.bak 's/powerlevel9k/powerlevel10k/g' /root/.zshrc \
+    && sed -i.bak 's/powerlevel9k/powerlevel10k/g' /home/$USER_NAME/.zshrc 
 
 ############################################################
 ########### Tools and Utilities versions checks ############
@@ -298,5 +312,6 @@ COPY .zshrc /home/$USER_NAME/.zshrc
 
 RUN /utilsversions.sh
 
+USER $USER_NAME
 CMD ["zsh"]
 
