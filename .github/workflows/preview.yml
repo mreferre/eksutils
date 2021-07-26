@@ -3,7 +3,7 @@ name: preview-bot
 on:
   pull_request:
     #types: [synchronize, labeled, unlabeled, reopened, closed]
-    types: [opened, synchronize, labeled, unlabeled, reopened, closed]
+    types: [opened, synchronize, reopened]
 
 env:
   PREVIEW_STACK_NAME: preview-${{ github.event.repository.owner.login }}-${{ github.event.repository.name }}-pr-${{ github.event.number }}
