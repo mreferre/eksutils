@@ -12,7 +12,6 @@ env:
   AWS_DEFAULT_REGION: eu-west-1
 
 jobs:
-       
   BuildDocker:
     name: build-docker-hub
     #if: "github.event.pull_request.merged || github.ref == 'refs/heads/master'"
@@ -30,7 +29,7 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR Public
         id: build-image-ecr-public
         env:
-          ECR_REGISTRY: "allamand"
+          ECR_REGISTRY: 'allamand'
           ECR_REPOSITORY: ${{ github.event.repository.name }}
           IMAGE_TAG: ${{ github.sha }}
           #IMAGE_TAG: ${{ github.event.number }}
@@ -44,7 +43,7 @@ jobs:
           #update latest
           docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"          
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
   BuildECR:
     name: build-ecr-public
@@ -61,12 +60,12 @@ jobs:
           username: ${{ secrets.AWS_ACCESS_KEY_ID }}
           password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         env:
-          AWS_REGION: ${{ env.AWS_DEFAULT_REGION }}
+          AWS_REGION: us-east-1
 
       - name: Build, tag, and push image to Amazon ECR Public
         id: build-image-ecr-public
         env:
-          ECR_REGISTRY: "public.ecr.aws/seb-demo"
+          ECR_REGISTRY: 'public.ecr.aws/seb-demo'
           ECR_REPOSITORY: ${{ github.event.repository.name }}
           IMAGE_TAG: ${{ github.sha }}
           #IMAGE_TAG: ${{ github.event.number }}
@@ -80,5 +79,4 @@ jobs:
           #update latest
           docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"          
-  
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
