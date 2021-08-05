@@ -302,9 +302,9 @@ WORKDIR /home/$USER_NAME
 
 COPY .zshrc /root/.zshrc
 COPY .zshrc /home/$USER_NAME/.zshrc
+COPY .p10k.zsh /root/.p10k.zsh
+COPY .p10k.zsh /home/$USER_NAME/.p10k.zsh
 
-RUN sed -i.bak 's/powerlevel9k/powerlevel10k/g' /root/.zshrc \
-    && sed -i.bak 's/powerlevel9k/powerlevel10k/g' /home/$USER_NAME/.zshrc 
 
 ############################################################
 ########### Tools and Utilities versions checks ############
